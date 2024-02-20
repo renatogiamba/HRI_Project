@@ -19,9 +19,18 @@ if __name__ == "__main__":
             person_scanned = False
 
             while not person_scanned:
-                front_person_scanned, back_person_scanned = pepper.scan_for_person(1.2)
+                front_person_scanned, back_person_scanned = pepper.scan_for_person(
+                    1.2, True
+                )
                 pepper.reset_sonars()
                 person_scanned = front_person_scanned or back_person_scanned
+
+                if front_person_scanned:
+                    pepper.on_front_person_scanned()
+                    pepper.introduce()
+                    loop = False
+                if back_person_scanned:
+                    pepper.on_back_person_scanned()
                 time.sleep(1.)
 
     except KeyboardInterrupt:
