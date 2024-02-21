@@ -4,7 +4,7 @@ import blackjack_env
 
 if __name__ == "__main__":
     env = blackjack_env.BlackjackEnv()
-    sum_hand, dealer_card, usable_ace = env.reset()
+    (sum_hand, dealer_card, usable_ace), _ = env.reset()
     print env.deck
     print env.player_hand
     print env.dealer_hand
@@ -21,4 +21,3 @@ if __name__ == "__main__":
     print usable_ace
     print reward
     print terminated
-    
