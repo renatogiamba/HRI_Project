@@ -84,10 +84,9 @@ class BlackjackEnv():
         return card
     
     def usable_ace(self, hand):
-        aces = list(filter(lambda card: card.type == "A", hand))
-        sum_hand = sum(map(lambda card: card.value, hand))
+        card_values = map(lambda card: card.value, hand)
         
-        return int(len(aces) > 0 and sum_hand + 10 <= 21)
+        return int(1 in card_values and sum(card_values) + 10 <= 21)
     
     def sum_hand(self, hand):
         sum_hand = sum(map(lambda card: card.value, hand))
@@ -95,7 +94,8 @@ class BlackjackEnv():
         return sum_hand + 10 if self.usable_ace(hand) else sum_hand
     
     def is_blackjack(self, hand):
-        return len(hand) == 2 and self.sum_hand(hand) == 21
+        card_values = map(lambda card: card.value, hand)
+        return sorted(card_values) == [1, 10]
     
     def is_bust(self, hand):
         return self.sum_hand(hand) > 21
