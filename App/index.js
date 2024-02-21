@@ -35,9 +35,31 @@ function main() {
         console.log(event.data)
         humanMessage = JSON.parse(event.data)
 
-        if(humanMessage.answer == 'start'){
+        if(humanMessage.answer == 'First Start'){
             changeScene(waitingToStart)
         }
+        else if (humanMessage.answer == 'start'){
+            changeScene(welcome)
+        }
+    }
+
+    let green = '#6ef86e'
+    let red = '#ff4a4a'
+
+    let welcome = {
+        sceneName: 'welcome',
+        text: () => 'Hello Human! Do you want to play a BlackJack match?',
+        buttons: ['Yes', 'No'],
+        colors: [green, red],
+        listeners: [() => {
+                        ws.send(JSON.stringify({'buttonPressed': 'Yes'}))
+                        changeScene(presentation)
+                    },
+                    () => {
+                        ws.send(JSON.stringify({'buttonPressed': 'No'}))
+                        changeScene(noGame)
+                    }
+                ]
     }
 
     waitingToStart = {

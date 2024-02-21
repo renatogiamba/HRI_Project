@@ -6,6 +6,7 @@ import socket
 import os
 import sys
 import json
+import time
 
 sys.path.append(os.getenv("PEPPER_TOOLS_HOME") + "/cmd_server")
 sys.path.append("pepper")
@@ -25,10 +26,25 @@ class MyWebSocketServer(tornado.websocket.WebSocketHandler):
         global pepper
 
         if(message == 'First Interaction'):
-            self.write_message(json.dumps({'answer': 'start'}))
+            self.write_message(json.dumps({'answer': 'First Start'}))
         
         elif('interface started' in message):
-            pepper.hello()
+            front_person_scanned = False
+            back_person_scanned = False
+            person_scanned = False
+            while not person_scanned:
+                front_person_scanned, back_person_scanned = pepper.scan_for_person(
+                    1.2, True
+                )
+                pepper.reset_sonars()
+                person_scanned = front_person_scanned or back_person_scanned
+
+                if front_person_scanned:
+                    pepper.on_front_person_scanned()
+                if back_person_scanned:
+                    pepper.on_back_person_scanned()
+                time.sleep(1.)
+            self.write_message(json.dumps({'answer': 'start'}, indent=4))
 
     
     def on_close(self):

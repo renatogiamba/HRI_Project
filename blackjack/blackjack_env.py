@@ -115,7 +115,7 @@ class BlackjackEnv():
         return random.randint(0, 1)
     
     def reset(self):
-        self.deck = self.reset_deck()
+        self.deck,self.deck_values = self.reset_deck()
 
         card, card_value = self.draw_card()
         self.player_hand.append(card)
@@ -132,7 +132,7 @@ class BlackjackEnv():
     def step(self, action):
         if action == 0:
             terminated = True
-            while self.sum_hand(self.dealer_hand) < 17:
+            while self.sum_hand(self.dealer_hand_values) < 17:
                 card, card_value = self.draw_card()
                 self.dealer_hand.append(card)
                 self.dealer_hand_values.append(card_value)
