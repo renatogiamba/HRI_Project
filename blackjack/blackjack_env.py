@@ -16,6 +16,7 @@ class Card():
 
 class BlackjackEnv():
     def __init__(self):
+        self.num_actions = 2
         self.deck = self.reset_deck()
         self.player_hand = []
         self.dealer_hand = []
@@ -108,6 +109,9 @@ class BlackjackEnv():
             self.dealer_hand[0].value,
             self.usable_ace(self.player_hand)
         )
+    
+    def sample_action(self):
+        return random.randint(0, 1)
     
     def reset(self):
         self.deck = self.reset_deck()
