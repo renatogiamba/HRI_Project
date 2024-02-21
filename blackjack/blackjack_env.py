@@ -17,9 +17,11 @@ class Card():
 class BlackjackEnv():
     def __init__(self):
         self.num_actions = 2
-        self.deck = self.reset_deck()
+        self.deck, self.deck_values = self.reset_deck()
         self.player_hand = []
+        self.player_hand_values = []
         self.dealer_hand = []
+        self.dealer_hand_values = []
     
     def reset_deck(self):
         deck = [
@@ -77,25 +79,24 @@ class BlackjackEnv():
             Card("K", "spades", 10)
         ]
         random.shuffle(deck)
-        return collections.deque(deck)
+        deck_values = map(lambda card: card.value, deck)
+        return collections.deque(deck), collections.deque(deck_values)
     
     def draw_card(self):
         card = self.deck.popleft()
-        return card
+        card_value = self.deck_values.popleft()
+        return card, card_value
     
     def usable_ace(self, hand):
-        card_values = map(lambda card: card.value, hand)
-        
-        return int(1 in card_values and sum(card_values) + 10 <= 21)
+        return int(1 in hand and sum(hand) + 10 <= 21)
     
     def sum_hand(self, hand):
-        sum_hand = sum(map(lambda card: card.value, hand))
+        sum_hand = sum(hand)
 
         return sum_hand + 10 if self.usable_ace(hand) else sum_hand
     
     def is_blackjack(self, hand):
-        card_values = map(lambda card: card.value, hand)
-        return sorted(card_values) == [1, 10]
+        return sorted(hand) == [1, 10]
     
     def is_bust(self, hand):
         return self.sum_hand(hand) > 21
@@ -105,9 +106,9 @@ class BlackjackEnv():
     
     def get_observation(self):
         return (
-            self.sum_hand(self.player_hand),
-            self.dealer_hand[0].value,
-            self.usable_ace(self.player_hand)
+            self.sum_hand(self.player_hand_values),
+            self.dealer_hand_values[0],
+            self.usable_ace(self.player_hand_values)
         )
     
     def sample_action(self):
@@ -115,10 +116,16 @@ class BlackjackEnv():
     
     def reset(self):
         self.deck = self.reset_deck()
-        self.player_hand.append(self.draw_card())
-        self.player_hand.append(self.draw_card())
-        self.dealer_hand.append(self.draw_card())
-        self.dealer_hand.append(self.draw_card())
+
+        card, card_value = self.draw_card()
+        self.player_hand.append(card)
+        self.player_hand_values.append(card_value)
+        card, card_value = self.draw_card()
+        self.player_hand.append(card)
+        self.player_hand_values.append(card_value)
+        card, card_value = self.draw_card()
+        self.dealer_hand.append(card)
+        self.dealer_hand_values.append(card_value)
 
         return self.get_observation(), {}
     
@@ -126,16 +133,22 @@ class BlackjackEnv():
         if action == 0:
             terminated = True
             while self.sum_hand(self.dealer_hand) < 17:
-                self.dealer_hand.append(self.draw_card())
-            player_score = self.score(self.player_hand, False)
-            dealer_score = self.score(self.dealer_hand, self.is_bust(self.dealer_hand))
+                card, card_value = self.draw_card()
+                self.dealer_hand.append(card)
+                self.dealer_hand_values.append(card_value)
+            player_score = self.score(self.player_hand_values, False)
+            dealer_score = self.score(
+                self.dealer_hand_values, self.is_bust(self.dealer_hand_values)
+            )
             reward = float(player_score > dealer_score) - float(player_score < dealer_score)
-            if self.is_blackjack(self.player_hand) and\
-                not self.is_blackjack(self.dealer_hand):
+            if self.is_blackjack(self.player_hand_values) and\
+                not self.is_blackjack(self.dealer_hand_values):
                 reward = 1.5
         elif action == 1:
-            self.player_hand.append(self.draw_card())
-            busted = self.is_bust(self.player_hand)
+            card, card_value = self.draw_card()
+            self.player_hand.append(card)
+            self.player_hand_values.append(card_value)
+            busted = self.is_bust(self.player_hand_values)
             terminated = busted
             reward = -1. if busted else 0.
         else:
