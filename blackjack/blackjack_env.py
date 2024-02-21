@@ -95,6 +95,19 @@ class BlackjackEnv():
 
         return sum_hand + 10 if self.usable_ace(hand) else sum_hand
     
+    def is_bust(self, hand):
+        return self.sum_hand(hand) > 21
+    
+    def score(self, hand, busted):
+        return 0 if busted else self.sum_hand(hand)
+    
+    def get_observation(self):
+        return (
+            self.sum_hand(self.player_hand),
+            self.dealer_hand[0].value,
+            self.usable_ace(self.player_hand)
+        )
+    
     def reset(self):
         self.deck = self.reset_deck()
         self.player_hand.append(self.draw_card())
@@ -102,16 +115,23 @@ class BlackjackEnv():
         self.dealer_hand.append(self.draw_card())
         self.dealer_hand.append(self.draw_card())
 
-        return (
-            self.sum_hand(self.player_hand),
-            self.dealer_hand[0].value,
-            self.usable_ace(self.player_hand)
-        )
+        return self.get_observation()
     
     def step(self, action):
+        ## Dettagli con NATURAL and SAB
         if action == 0:
-            pass
+            self.player_hand.append(self.draw_card())
+            busted = self.is_bust(self.player_hand)
+            terminated = busted
+            reward = -1. if busted else 0.
         elif action == 1:
-            pass
+            terminated = True
+            while self.sum_hand(self.dealer_hand) < 17:
+                self.dealer_hand.append(self.draw_card())
+            player_score = self.score(self.player_hand, False)
+            dealer_score = self.score(self.dealer_hand, self.is_bust(self.dealer_hand))
+            reward = float(player_score > dealer_score) - float(player_score < dealer_score)
         else:
             reward = 0.
+        
+        return self.get_observation(), reward, terminated, False, {}
