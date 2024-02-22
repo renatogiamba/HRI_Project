@@ -144,7 +144,6 @@ function changeScene(props, flag='') {
         return
     }
 
-    // Keeps cheking every 0.2 seconds wether the whole sentence has been written to let the buttons appear
     let buttonInterval = window.setInterval(function() {
         if (doneWriting) {
             if (props.buttons.length == 0) {
@@ -166,7 +165,6 @@ function changeScene(props, flag='') {
             }
             else {
                 window.setTimeout(function() {
-                    // If the player won the previous game, the button for the next level is suggested
                     if (flag == 'levelWon') {
                         console.log(data)
                         chosenLevel = data.levelsPlayed.at(-1)
