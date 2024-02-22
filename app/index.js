@@ -1,7 +1,5 @@
-const GREEN = "#6ef86e";
+/*const GREEN = "#6ef86e";
 const RED   = "#ff4a4a";
-const BLUE = '#8cf1e9'
-let data = {}
 
 let welcome = {
     sceneName: "welcome",
@@ -26,73 +24,6 @@ let waitingToStart = {
     buttons: [],
     colors: [],
     listeners: []
-}
-
-let presentation = {
-    sceneName: 'presentation',
-    text: () => `Great, I'm Pepper! What's your username?`,
-    buttons: [],
-    colors: [],
-    listeners: [() => {
-                    ws.send(JSON.stringify({'buttonPressed': userName}))
-                    data.username = userName
-                    changeScene(isNovice)
-                }
-            ]
-}
-
-let noGame = {
-    sceneName: 'noGame',
-    text: () => 'Oh ok, that\'s a pity. I hope you have a nice day!',
-    buttons: [],
-    colors: [],
-    listeners: []
-}
-
-let isNovice = {
-    sceneName: 'isNovice',
-    text: () => `${userName}, such a nice name! Have you ever played BlackJack?`,
-    buttons: ['Yes', 'No'],
-    colors: [GREEN, RED],
-    listeners: [() => {
-                    ws.send(JSON.stringify({'buttonPressed': 'Yes'}))
-                    data.isNovice = false
-                    changeScene(playedBefore)
-                },
-                () => {
-                    ws.send(JSON.stringify({'buttonPressed': 'No'}))
-                    data.isNovice = true
-                    changeScene(rules)
-                }
-            ]
-}
-
-let playedBefore = {
-    sceneName: 'playedBefore',
-    text: () => 'Great! Do you want to be reminded the rules of the game?',
-    buttons: ['Yes', 'No'],
-    colors: [GREEN, RED],
-    listeners: [() => {
-                    ws.send(JSON.stringify({'buttonPressed': 'Yes'}))
-                    changeScene(rules)
-                },
-                () => {
-                    ws.send(JSON.stringify({'buttonPressed': 'No'}))
-                    window.location.href = "http://127.0.0.1:5500/HRI_Project/App/game/index.html"
-                }
-            ]
-}
-
-let rules = {
-    sceneName: 'rules',
-    text: () => 'The goal of the game is to...',
-    buttons: ['Got it'],
-    colors: [BLUE],
-    listeners: [() => {
-        ws.send(JSON.stringify({'buttonPressed': 'Got it'}))
-        window.location.href = "http://127.0.0.1:5500/HRI_Project/App/game/index.html"
-        
-    }]
 }
 
 function textAnimation(sentence) {
@@ -218,57 +149,18 @@ function changeScene(props, flag='') {
         }
     })
 }
+*/
 
 
 ws = new WebSocket("ws://localhost:9050/websocketserver")
 ws.onopen = function() {
-    console.log("Connection established")
-    ws.send("First Interaction")
+    console.log("[Pepper WS Server js]: Connection established")
 }
-ws.onmessage = function(event) {
-    console.log(event.data)
+ws.onmessage = function (event) {
     humanMessage = JSON.parse(event.data)
 
-    if (humanMessage.answer == "First Start"){
-        changeScene(waitingToStart)
-        data = {
-            'username': '',
-            'isNovice': true,
-        }
-    }
-    else if (humanMessage.answer == "start"){
-        changeScene(welcome)
-    }
-    else if (currentScene == 'welcome')
-        if (humanMessage.answer == 'Yes'){
-            changeScene(presentation)
-        }
-        else if (humanMessage == 'No'){
-            changeScene(noGame)
-        }
-    else if (currentScene == 'presentation') {
-        userName = humanMessage.answer
-        changeScene(isNovice)
-    }
-    else if (currentScene == 'isNovice') {
-        if (humanMessage.answer == 'Yes') {
-            data.isNovice = false
-            changeScene(playedBefore)
-        }
-        else if (humanMessage.answer == 'No') {
-            data.isNovice = true
-            changeScene(rules)
-        }
-    }
-    else if (currentScene == 'playedBefore') {
-        if (humanMessage.answer == 'Yes') {
-            changeScene(rules)
-        }
-        else if (humanMessage.answer == 'No') {
-            window.location.href = "http://127.0.0.1:5500/HRI_Project/App/game/index.html"
-        }
-    }
-    else if (currentScene == 'rules'){
-        window.location.href = "http://127.0.0.1:5500/HRI_Project/App/game/index.html"
+    if (humanMessage.command == "close") {
+        ws.close()
+        console.log("[Pepper WS Server js]: Connection closed")
     }
 }

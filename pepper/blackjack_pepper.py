@@ -58,13 +58,13 @@ class BlackjackPepper():
         return front_person_scanned, back_person_scanned
     
     def on_back_person_scanned(self):
-        print "Person scanned behind Pepper."
+        print "[Pepper]: Person scanned behind me"
         self.say("Hello! You are behind me.")
         self.say("Please, come in front so that I can see you.")
 
     def on_front_person_scanned(self):
-        print "Person scanned in front of Pepper."
-        self.say("Hello!")
+        print "[Pepper]: Person scanned in front of me"
+        self.say("Hello! I'm Pepper the robot.")
         self.hello()
     
     def say(self, sentence, require_answer=False):
@@ -85,10 +85,10 @@ class BlackjackPepper():
             memory_service.insertData(self._instance.fakeASRkey, "")
         return answer
     
-    def introduce(self):
+    '''def introduce(self):
         self.say("I'm Pepper the robot.")
         name = self.say("What's your name?", require_answer=True)
-        self.say("Hi " + name + "! Nice to meet you!")
+        self.say("Hi " + name + "! Nice to meet you!")'''
     
     def hello(self):
         motion_service = self._instance.motion_service

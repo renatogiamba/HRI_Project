@@ -76,6 +76,7 @@ def main():
     except KeyboardInterrupt:
         print "-- Keyboard interrupt --"
 
+    print websocket_server
     if (not websocket_server is None):
         websocket_server.close()
     print "Web server quit."   
