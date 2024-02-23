@@ -78,7 +78,7 @@ let playedBefore = {
                 },
                 () => {
                     ws.send(JSON.stringify({'buttonPressed': 'No'}))
-                    window.location.href = "http://127.0.0.1:5500/HRI_Project/App/game/index.html"
+                    window.location.href = "http://127.0.0.1:5500/App/game/index.html"
                 }
             ]
 }
@@ -90,7 +90,7 @@ let rules = {
     colors: [BLUE],
     listeners: [() => {
         ws.send(JSON.stringify({'buttonPressed': 'Got it'}))
-        window.location.href = "http://127.0.0.1:5500/HRI_Project/App/game/index.html"
+        window.location.href = "http://127.0.0.1:5500/App/game/index.html"
         
     }]
 }
@@ -263,10 +263,10 @@ ws.onmessage = function(event) {
             changeScene(rules)
         }
         else if (humanMessage.answer == 'No') {
-            window.location.href = "http://127.0.0.1:5500/HRI_Project/App/game/index.html"
+            window.location.href = "http://127.0.0.1:5500/App/game/index.html"
         }
     }
     else if (currentScene == 'rules'){
-        window.location.href = "http://127.0.0.1:5500/HRI_Project/App/game/index.html"
+        window.location.href = "http://127.0.0.1:5500/App/game/index.html"
     }
 }

@@ -1,8 +1,13 @@
+var stage;
+var game;
+var player;
+var bank;
+
 function init(){
 
-	var stage = new createjs.Stage("canvas");
+	stage = new createjs.Stage("canvas");
 
-	var game = {
+	game = {
 
 		deck: [],
 		chipsValue: {
@@ -404,7 +409,7 @@ function init(){
 
 	};
 
-	var bank = {
+	bank = {
 
 		deck: [],
 		cardsContainer: false,
@@ -431,7 +436,7 @@ function init(){
 
 	};
 
-	var player = {
+	player = {
 
 		deck: [],
 		name: {
