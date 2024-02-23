@@ -39,7 +39,7 @@ const imgs = {
 	}
 };
 
-const deckNumber = 6;
+const deckNumber = 1;
 const suits = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
 
 const messages = {
@@ -49,12 +49,12 @@ const messages = {
 	lose: 'Dealer wins',
 	warning: {
 		bet: {msg: 'You need to bet first', x: 750},
-		insurance: {msg: 'You can not use insurance', x: 725},
-		insured: {msg:'insurance used !', x: 800},
-		double: {msg: 'You can not double now', x: 725},
+		//insurance: {msg: 'You can not use insurance', x: 725},
+		//insured: {msg:'insurance used !', x: 800},
+		//double: {msg: 'You can not double now', x: 725},
 		funds: {msg: "You haven't got enough funds", x: 680},
 		hit: {msg: 'You can not hit anymore', x: 720},
-		doubled: {msg: 'Bet doubled !', x: 800},
+		//doubled: {msg: 'Bet doubled !', x: 800},
 		giveUp: {msg: 'You can not give up now !', x: 720},
 		gaveUp: {msg: 'You gave up', x: 800}
 	},
