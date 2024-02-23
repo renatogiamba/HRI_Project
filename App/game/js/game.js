@@ -25,7 +25,7 @@ function init(){
 			//new Button('Insurance', '#fff', 100, -80, () => player.insure()),
 			//new Button('Split', '#fff', 100, -40, () => l('split')),
 			//new Button('Double', '#fff', 100, -40, () => player.double()),
-			new Button('Give up', '#fff', 100, 0, () => player.giveUp()),
+			//new Button('Give up', '#fff', 100, 0, () => player.giveUp()),
 			new Button('New game', '#fff', 100, -490, () => game.reset())
 		],
 		buttonContainer: false,
@@ -230,19 +230,18 @@ function init(){
 		deckValue: function(deck){
 			var total = 0;
 
-			deck.forEach(function(card){
+			const usableAce = (deck, total) => deck.includes('A') && total + 10 <= 21;
+
+			deck.forEach(function(card) {
 				if(card.value >= 2 && card.value < 11)
 					total += card.value;
 				if(['J', 'Q', 'K'].includes(card.value))
 					total += 10;
-				if(card.value === 'A') {
-					total += 1;
-					if (total + 10 <= 21)
-						total += 10
-				}
+				if(card.value === 'A')
+					total += 1
 			});
 
-			return total;
+			return usableAce(deck, total) ? total + 10 : total;
 		},
 
 		distributeCard: function(to, hidden = false){
@@ -532,7 +531,7 @@ function init(){
 				game._alert(messages.warning.double);
 		},*/
 
-		giveUp: function(){
+		/*giveUp: function(){
 			if(game.inProgress && this.deck.length === 2 && bank.deck.length === 2){
 				game._alert(messages.warning.gaveUp);
 				this.funds += Math.round(this.dealt / 2);
@@ -544,7 +543,7 @@ function init(){
 			}
 			else
 				game._alert(messages.warning.giveUp);
-		},
+		},*/
 
 		win: function(){
 			game.message.text.text = messages.win;

@@ -87,13 +87,13 @@ class BlackjackEnv():
         card_value = self.deck_values.popleft()
         return card, card_value
     
-    def usable_ace(self, hand):
-        return int(1 in hand and sum(hand) + 10 <= 21)
+    def usable_ace(self, hand, sum_hand_):
+        return int(1 in hand and sum_hand_ + 10 <= 21)
     
     def sum_hand(self, hand):
-        sum_hand = sum(hand)
+        sum_hand_ = sum(hand)
 
-        return sum_hand + 10 if self.usable_ace(hand) else sum_hand
+        return sum_hand_ + 10 if self.usable_ace(hand, sum_hand_) else sum_hand_
     
     def is_blackjack(self, hand):
         return sorted(hand) == [1, 10]
@@ -105,10 +105,11 @@ class BlackjackEnv():
         return 0 if busted else self.sum_hand(hand)
     
     def get_observation(self):
+        sum_hand_ = self.sum_hand(self.player_hand_values)
         return (
-            self.sum_hand(self.player_hand_values),
+            sum_hand_,
             self.dealer_hand_values[0],
-            self.usable_ace(self.player_hand_values)
+            self.usable_ace(self.player_hand_values, sum_hand_)
         )
     
     def sample_action(self):
