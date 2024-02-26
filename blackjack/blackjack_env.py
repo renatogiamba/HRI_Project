@@ -17,7 +17,7 @@ class Card():
 class BlackjackEnv():
     def __init__(self):
         self.num_actions = 2
-        self.deck, self.deck_values = self.reset_deck()
+        self.deck, self.deck_values = [], []
         self.player_hand = []
         self.player_hand_values = []
         self.dealer_hand = []
@@ -87,13 +87,13 @@ class BlackjackEnv():
         card_value = self.deck_values.popleft()
         return card, card_value
     
-    def usable_ace(self, hand, sum_hand_):
-        return int(1 in hand and sum_hand_ + 10 <= 21)
+    def usable_ace(self, hand):
+        return int(1 in hand and sum(hand) + 10 <= 21)
     
     def sum_hand(self, hand):
         sum_hand_ = sum(hand)
 
-        return sum_hand_ + 10 if self.usable_ace(hand, sum_hand_) else sum_hand_
+        return sum_hand_ + 10 if self.usable_ace(hand) else sum_hand_
     
     def is_blackjack(self, hand):
         return sorted(hand) == [1, 10]
@@ -105,18 +105,25 @@ class BlackjackEnv():
         return 0 if busted else self.sum_hand(hand)
     
     def get_observation(self):
-        sum_hand_ = self.sum_hand(self.player_hand_values)
         return (
-            sum_hand_,
+            self.sum_hand(self.player_hand_values),
             self.dealer_hand_values[0],
-            self.usable_ace(self.player_hand_values, sum_hand_)
+            self.usable_ace(self.player_hand_values)
         )
     
     def sample_action(self):
         return random.randint(0, 1)
     
     def reset(self):
-        self.deck,self.deck_values = self.reset_deck()
+        self.deck, self.deck_values = self.reset_deck()
+        #self.player_hand = 
+        del self.player_hand[:]
+        #self.player_hand_values =
+        del self.player_hand_values[:]
+        #self.dealer_hand =
+        del self.dealer_hand[:]
+        #self.dealer_hand_values =
+        del self.dealer_hand_values[:]
 
         card, card_value = self.draw_card()
         self.player_hand.append(card)
@@ -124,6 +131,9 @@ class BlackjackEnv():
         card, card_value = self.draw_card()
         self.player_hand.append(card)
         self.player_hand_values.append(card_value)
+        card, card_value = self.draw_card()
+        self.dealer_hand.append(card)
+        self.dealer_hand_values.append(card_value)
         card, card_value = self.draw_card()
         self.dealer_hand.append(card)
         self.dealer_hand_values.append(card_value)
