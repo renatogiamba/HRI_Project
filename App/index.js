@@ -3,6 +3,60 @@ const RED   = "#ff4a4a";
 const BLUE = '#8cf1e9'
 let data = {}
 
+let ws_9050 = new WebSocket("ws://localhost:9050/websocketserver")
+ws_9050.onopen = function() {
+    console.log("Connection established")
+    ws_9050.send("First Interaction")
+}
+ws_9050.onmessage = function(event) {
+    console.log(event.data)
+    humanMessage = JSON.parse(event.data)
+
+    if (humanMessage.answer == "First Start"){
+        changeScene(waitingToStart)
+        data = {
+            'username': '',
+            'isNovice': true,
+        }
+    }
+    else if (humanMessage.answer == "start"){
+        changeScene(welcome)
+    }
+    else if (currentScene == 'welcome')
+        if (humanMessage.answer == 'Yes'){
+            changeScene(presentation)
+        }
+        else if (humanMessage == 'No'){
+            changeScene(noGame)
+        }
+    else if (currentScene == 'presentation') {
+        userName = humanMessage.answer
+        changeScene(isNovice)
+    }
+    else if (currentScene == 'isNovice') {
+        if (humanMessage.answer == 'Yes') {
+            data.isNovice = false
+            changeScene(playedBefore)
+        }
+        else if (humanMessage.answer == 'No') {
+            data.isNovice = true
+            changeScene(rules)
+        }
+    }
+    else if (currentScene == 'playedBefore') {
+        if (humanMessage.answer == 'Yes') {
+            changeScene(rules)
+        }
+        else if (humanMessage.answer == 'No') {
+            window.location.href = "http://127.0.0.1:5500/App/game/index.html"
+        }
+    }
+    else if (currentScene == 'rules'){
+        window.location.href = "http://127.0.0.1:5500/App/game/index.html"
+    }
+}
+
+
 let welcome = {
     sceneName: "welcome",
     text: () => 'Hello Human! Do you want to play a BlackJack match?',
@@ -10,11 +64,11 @@ let welcome = {
     colors: [GREEN, RED],
     listeners: [
         () => {
-            ws.send(JSON.stringify({"buttonPressed": "Yes"}))
+            ws_9050.send(JSON.stringify({"buttonPressed": "Yes"}))
             changeScene(presentation)
         },
         () => {
-            ws.send(JSON.stringify({"buttonPressed": "No"}))
+            ws_9050.send(JSON.stringify({"buttonPressed": "No"}))
             changeScene(noGame)
         }
     ]
@@ -34,7 +88,7 @@ let presentation = {
     buttons: [],
     colors: [],
     listeners: [() => {
-                    ws.send(JSON.stringify({'buttonPressed': userName}))
+                    ws_9050.send(JSON.stringify({'buttonPressed': userName}))
                     data.username = userName
                     changeScene(isNovice)
                 }
@@ -55,12 +109,12 @@ let isNovice = {
     buttons: ['Yes', 'No'],
     colors: [GREEN, RED],
     listeners: [() => {
-                    ws.send(JSON.stringify({'buttonPressed': 'Yes'}))
+                    ws_9050.send(JSON.stringify({'buttonPressed': 'Yes'}))
                     data.isNovice = false
                     changeScene(playedBefore)
                 },
                 () => {
-                    ws.send(JSON.stringify({'buttonPressed': 'No'}))
+                    ws_9050.send(JSON.stringify({'buttonPressed': 'No'}))
                     data.isNovice = true
                     changeScene(rules)
                 }
@@ -73,11 +127,11 @@ let playedBefore = {
     buttons: ['Yes', 'No'],
     colors: [GREEN, RED],
     listeners: [() => {
-                    ws.send(JSON.stringify({'buttonPressed': 'Yes'}))
+                    ws_9050.send(JSON.stringify({'buttonPressed': 'Yes'}))
                     changeScene(rules)
                 },
                 () => {
-                    ws.send(JSON.stringify({'buttonPressed': 'No'}))
+                    ws_9050.send(JSON.stringify({'buttonPressed': 'No'}))
                     window.location.href = "http://127.0.0.1:5500/App/game/index.html"
                 }
             ]
@@ -89,7 +143,7 @@ let rules = {
     buttons: ['Got it'],
     colors: [BLUE],
     listeners: [() => {
-        ws.send(JSON.stringify({'buttonPressed': 'Got it'}))
+        ws_9050.send(JSON.stringify({'buttonPressed': 'Got it'}))
         window.location.href = "http://127.0.0.1:5500/App/game/index.html"
         
     }]
@@ -122,7 +176,7 @@ function changeScene(props, flag='') {
     buttonContainer.innerHTML = ''
 
     if (currentScene != "waitingToStart")
-        ws.send(JSON.stringify(
+        ws_9050.send(JSON.stringify(
             {
                 "vocabulary": props.buttons,
                 "sentence": props.text(),
@@ -130,13 +184,13 @@ function changeScene(props, flag='') {
             }
         ))
     else {
-        ws.send(JSON.stringify({"message": "interface started"}))
+        ws_9050.send(JSON.stringify({"message": "interface started"}))
     }
 
     textAnimation(props.text())
 
     if (currentScene == 'noGame') {
-        ws.send(JSON.stringify({'pepperSad': true, sentence: props.text()}))
+        ws_9050.send(JSON.stringify({'pepperSad': true, sentence: props.text()}))
         window.setTimeout(function() {
             console.log('resetting')
             changeScene(waitingToStart)
@@ -215,58 +269,4 @@ function changeScene(props, flag='') {
             window.clearInterval(buttonInterval)
         }
     })
-}
-
-
-ws = new WebSocket("ws://localhost:9050/websocketserver")
-ws.onopen = function() {
-    console.log("Connection established")
-    ws.send("First Interaction")
-}
-ws.onmessage = function(event) {
-    console.log(event.data)
-    humanMessage = JSON.parse(event.data)
-
-    if (humanMessage.answer == "First Start"){
-        changeScene(waitingToStart)
-        data = {
-            'username': '',
-            'isNovice': true,
-        }
-    }
-    else if (humanMessage.answer == "start"){
-        changeScene(welcome)
-    }
-    else if (currentScene == 'welcome')
-        if (humanMessage.answer == 'Yes'){
-            changeScene(presentation)
-        }
-        else if (humanMessage == 'No'){
-            changeScene(noGame)
-        }
-    else if (currentScene == 'presentation') {
-        userName = humanMessage.answer
-        changeScene(isNovice)
-    }
-    else if (currentScene == 'isNovice') {
-        if (humanMessage.answer == 'Yes') {
-            data.isNovice = false
-            changeScene(playedBefore)
-        }
-        else if (humanMessage.answer == 'No') {
-            data.isNovice = true
-            changeScene(rules)
-        }
-    }
-    else if (currentScene == 'playedBefore') {
-        if (humanMessage.answer == 'Yes') {
-            changeScene(rules)
-        }
-        else if (humanMessage.answer == 'No') {
-            window.location.href = "http://127.0.0.1:5500/App/game/index.html"
-        }
-    }
-    else if (currentScene == 'rules'){
-        window.location.href = "http://127.0.0.1:5500/App/game/index.html"
-    }
 }
