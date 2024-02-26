@@ -3,6 +3,23 @@ var game;
 var player;
 var bank;
 
+let ws_9020 = new WebSocket("ws://localhost:9020/websocketserver")
+ws_9020.onopen = function() {
+    console.log("Connection established")
+}
+ws_9020.onmessage = function(event) {
+    console.log(event.data)
+    humanMessage = JSON.parse(event.data)
+	if (humanMessage.action === 0){
+		game.buttonContainer.children[1].color='#ff0000'
+		setTimeout(()=>game.buttonContainer.children[1].color = '#fff',1000)
+	}
+	else if (humanMessage.action === 1){
+		game.buttonContainer.children[0].color='#ff0000'
+		setTimeout(()=>game.buttonContainer.children[0].color = '#fff',1000)
+	}
+}
+
 function init(){
 
 	stage = new createjs.Stage("canvas");
@@ -22,7 +39,7 @@ function init(){
 			new Button('Hit', '#fff', 100, 100, () => player.hit()),
 			new Button('Stand', '#fff', 200, 100, () => player.stand()),
 			new Button('Go', '#fff', 935, -430, () => game.go()),
-			//new Button('Insurance', '#fff', 100, -80, () => player.insure()),
+			new Button('Ask Pepper', '#fff', 100, 40, () => player.askPepper()),
 			//new Button('Split', '#fff', 100, -40, () => l('split')),
 			//new Button('Double', '#fff', 100, -40, () => player.double()),
 			//new Button('Give up', '#fff', 100, 0, () => player.giveUp()),
@@ -486,17 +503,15 @@ function init(){
 			bank.play();
 		},
 
-		/*insure: function(){
-			if(game.inProgress && bank.deck.length === 2 && bank.deck[0].value === 'A'){
-				this.insurance = Math.round(this.dealt / 2);
-				this.funds -= this.insurance;
-				this.chips = game.balanceChips(this.funds);
-				this.fundsText.update();
-				game._alert(messages.warning.insured);
-			}
-			else
-				game._alert(messages.warning.insurance);
-		},*/
+		askPepper: function(){
+			playerCardValues = player.deck.map(card=>card.value)
+			bankCardValues = bank.deck.filter(card=>!card.hidden).map(card=>card.value)
+			ws_9020.send(JSON.stringify({
+				gameState:{
+				playerCardValues:playerCardValues,
+				bankCardValues:bankCardValues
+			}}))
+		},
 
 		/*double: function(){
 			if(game.inProgress && this.deck.length === 2 && !this.doubled){
@@ -553,6 +568,7 @@ function init(){
 				game.end();
 				player.fundsText.update();
 			}, 2000);
+			ws_9020.send(JSON.stringify({command:'win'}))
 		},
 
 		lose: function(){
@@ -570,6 +586,7 @@ function init(){
 					return game.over();
 				game.end();
 			}, 2000);
+			ws_9020.send(JSON.stringify({command:'lose'}))
 		},
 
 		draw: function(){

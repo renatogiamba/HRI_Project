@@ -77,7 +77,7 @@ n_episodes = 2
 start_epsilon = 1.0
 epsilon_decay = start_epsilon / (n_episodes / 2)  
 final_epsilon = 0.1
-
+'''
 agent = BlackjackAgent(
     learning_rate=learning_rate,
     initial_epsilon=start_epsilon,
@@ -130,3 +130,5 @@ print "Eval Avg Score = %f" %(sum(scores) / n_episodes)
 #obs = (17,8,0)
 #action = agent.act(obs)
 #print 'action:%s' %(action)
+
+'''
