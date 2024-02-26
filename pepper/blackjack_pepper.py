@@ -133,3 +133,50 @@ class BlackjackPepper():
         motion_service.angleInterpolation("RHand", 0.98, 0.3, True)
     
         self._instance.normalPosture()
+    
+    def victory(self):
+        motion_service = self._instance.motion_service
+
+        joint_names = [
+            "RShoulderPitch", "RShoulderRoll", "RElbowRoll", "RWristYaw", "RHand",
+            "HipRoll", "HeadPitch",
+            "LShoulderPitch", "LShoulderRoll", "LElbowRoll", "LWristYaw", "LHand"
+        ]
+        joint_values = [
+            -0.141, -0.46, 0.892, -0.8, 0.98,
+            -0.07, -0.07,
+            -0.141, 0.46, -0.892, 0.8, 0.98
+        ]
+        motion_service.angleInterpolation(joint_names, joint_values, 1., True)
+
+        for step in range(2):
+            joint_names = [
+                "RElbowYaw", "LElbowYaw", "HipRoll", "HeadPitch"
+            ]
+            joint_values = [2.7, -1.3, -0.07, -0.07]
+            motion_service.angleInterpolation(joint_names, joint_values, 0.6, True)
+
+            joint_names = [
+                "RElbowYaw", "LElbowYaw", "HipRoll", "HeadPitch"
+            ]
+            joint_values = [1.3, -2.7, -0.07, -0.07]
+            motion_service.angleInterpolation(joint_names, joint_values, 0.6, True)
+
+        self._instance.normalPosture()
+    
+    def sad(self):
+        motion_service = self._instance.motion_service
+
+        joint_names = [
+            "RElbowRoll", "RElbowYaw", "RShoulderPitch", "RShoulderRoll",
+            "LElbowRoll", "LElbowYaw", "LShoulderPitch", "LShoulderRoll",
+            "HeadPitch", "HipPitch"
+        ]
+        joint_values = [1.38, 0.382, 1.33, -0.69, -1.42, -0.333, 1.24, 0.699, 0.445, -0.52]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.6, True)
+
+        motion_service.angleInterpolation("HeadYaw", 0.30, 0.4, True)
+        motion_service.angleInterpolation("HeadYaw", -0.30, 0.4, True)
+        motion_service.angleInterpolation("HeadYaw", 0.30, 0.4, True)
+
+        self._instance.normalPosture()
