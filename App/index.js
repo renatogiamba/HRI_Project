@@ -90,6 +90,7 @@ let presentation = {
     listeners: [() => {
                     ws_9050.send(JSON.stringify({'buttonPressed': userName}))
                     data.username = userName
+                    localStorage.setItem('BlackJackJs-userName', data.username)
                     changeScene(isNovice)
                 }
             ]

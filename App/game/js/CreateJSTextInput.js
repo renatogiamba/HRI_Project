@@ -1,6 +1,3 @@
-/**
- * Created by Andrew on 3/19/16.
- */
 class TextInput extends createjs.Container {
   constructor() {
     super();
