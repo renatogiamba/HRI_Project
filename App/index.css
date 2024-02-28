@@ -87,17 +87,6 @@ button:active {
     position: absolute;
     color: gray;
 }
-/*
-.button-green {
-    background-color: #6ef86e;
-    color: #000;
-}
-
-.button-red {
-    background-color: #ffd54a;
-    color: #000;
-}
-*/
 
 .buttons-out {
     animation: buttonsOut;

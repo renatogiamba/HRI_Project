@@ -5,10 +5,11 @@ var bank;
 
 var ws_9020 = new WebSocket("ws://localhost:9020/websocketserver");
 ws_9020.onopen = function() {
-    console.log("[Pepper BlackJack WS Server js]: Connection established")
+    console.log("[Pepper BlackJack WS Server js]: Connection established");
 };
 ws_9020.onmessage = function(event) {
     humanMessage = JSON.parse(event.data);
+
 	if (humanMessage.command != null) {
 		if (humanMessage.command === "close") {
 			ws_9020.close();
@@ -44,7 +45,8 @@ function init() {
 			new Button('Stand', '#fff', 200, 100, () => player.stand()),
 			new Button('Go', '#fff', 935, -430, () => game.go()),
 			new Button('Ask Pepper', '#fff', 100, 40, () => player.askPepper()),
-			new Button('New Game', '#fff', 100, -490, () => game.reset())
+			new Button('New Game', '#fff', 100, -490, () => game.reset()),
+			new Button('Quit Game', '#fff', 100, -430, () => game.exit())
 		],
 		buttonContainer: false,
 		dealtChipContainer: false,
@@ -82,6 +84,11 @@ function init() {
 		reset: function() {
 			['userName', 'chips', 'funds'].forEach(v => localStorage.removeItem('BlackJackJs-' + v));
 			location.reload();
+		},
+
+		exit: function() {
+			this.end();
+			window.location.href = "http://127.0.0.1:5500/App/survey.html";
 		},
 
 		over: function() {
