@@ -17,7 +17,7 @@ ws_9020.onmessage = function(event) {
 		}
 	}
 	else if (humanMessage.action != null) {
-		let button_idx = humanMessage.action === 0 ? 1 : 0;
+		let button_idx = humanMessage.action === 0 ? 4 : 3;
 		let button = game.buttonContainer.children[button_idx];
 
 		button.color = "#ff0000";

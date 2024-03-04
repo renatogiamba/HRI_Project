@@ -127,11 +127,12 @@ class BlackjackWSServer(tornado.websocket.WebSocketHandler):
                 usable_ace(playerCardValues)
             ) 
             action = agent.act(obs)
+            pepper.say("I suggest: " + ("Stand" if action == 0 else "Hit"))
             self.write_message(json.dumps({"action": action}))
         elif "pose" in message:
             if message["pose"] == "win":
                 pepper.victory()
-            elif message["command"] == "lose":
+            elif message["pose"] == "lose":
                 pepper.sad()
 
     @tornado.gen.coroutine

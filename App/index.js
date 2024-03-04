@@ -163,8 +163,8 @@ let recap = {
 
 let rules01 = {
     sceneName: "rules01",
-    text: () => `The goal of the game is to win money against the dealer creating hands with a better score than the one of the dealer.
-    To win, the player must have a higher score than the one of the dealer but not exceeding 21 otherwise he busts and loses or
+    text: () => `The goal of the game is to win money against the dealer creating hands with a better score than the ones of the dealer.
+    To win, the player must have a higher score than the one of the dealer but not exceeding 21, otherwise he busts and loses, or
     he must stop at a score hoping that the dealer will bust.`,
     buttons: ["Next"],
     colors: [BLUE],
@@ -177,7 +177,7 @@ let rules02 = {
     sceneName: "rules02",
     text: () => `After a bet, the dealer distributes two visible cards at the player and two cards to himself, one visible, one covered.
     Then, on his turn, the player can HIT (take another card) or STAND (stop taking cards and end his turn).
-    After, the dealer does the same with the constraint that if he reaches a score of 17 or higher, he MUST STAND.`,
+    After, the dealer does the same, with the constraint that if he reaches a score of 17 or higher, he MUST STAND.`,
     buttons: ["Next"],
     colors: [BLUE],
     listeners: [
@@ -202,7 +202,7 @@ let rules04 = {
     sceneName: "rules04",
     text: () => `The scores are determined summing all the values of the cards hand. Cards from 2 to 10 have a value equal to their
     nominal value, face cards (J, Q, K) have a value of 10, As have a value of 1 or 11 chosen in a way to not bust.
-    BLACK JACK is done by having a score of 21 with EXACTLY two cards: an A and a 10-values card (10, J, Q, K).`,
+    BLACK JACK is done by having a score of 21 with EXACTLY two cards: an A and a 10-value card (10, J, Q, K).`,
     buttons: ["Got it! Let's play the game"],
     colors: [BLUE],
     listeners: [
@@ -379,6 +379,7 @@ function changeScene(props, flag='') {
         textAnimation(props.text());
         let interval = setInterval(() => {
             if (doneWriting) {
+                doneWriting = false;
                 let button = document.createElement("button");
 
                 button.classList.add("button");
@@ -398,6 +399,7 @@ function changeScene(props, flag='') {
         textAnimation(props.text());
         let interval = setInterval(() => {
             if (doneWriting) {
+                doneWriting = false;
                 let button = document.createElement("button");
 
                 button.classList.add("button");
@@ -417,6 +419,7 @@ function changeScene(props, flag='') {
         textAnimation(props.text());
         let interval = setInterval(() => {
             if (doneWriting) {
+                doneWriting = false;
                 let button = document.createElement("button");
 
                 button.classList.add("button");
@@ -436,6 +439,7 @@ function changeScene(props, flag='') {
         textAnimation(props.text());
         let interval = setInterval(() => {
             if (doneWriting) {
+                doneWriting = false;
                 let button = document.createElement("button");
 
                 button.classList.add("button");
