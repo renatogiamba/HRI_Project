@@ -11,9 +11,8 @@
 <body>
     <div class="scene">
         <h2>Thank you for playing with me!</h2>
-        <h3></h3>
         <h4>Please, rate my interaction capabilities</h4>
-        <div class="rating" id="q1">
+        <div id="q1">
             <input type="radio" class="star" value="0" id="q1-r0" name="q1-rate">
             <label for="q1-r0">0</label>
 
@@ -29,7 +28,7 @@
             <input type="radio" class="star" value="4" id="q1-r4" name="q1-rate">
             <label for="q1-r4">4</label>
 
-            <input type="radio" class="star" value="5" id="q1-r5" name="q1-rate">
+            <input type="radio" class="star" value="5" id="q1-r5" name="q1-rate" checked>
             <label for="q1-r5">5</label>
 
             <input type="radio" class="star" value="6" id="q1-r6" name="q1-rate">
@@ -48,7 +47,7 @@
             <label for="q1-r10">10</label>
         </div>
         <h4>Please, rate how match you would recommend playing with me</h4>
-        <div class="rating" id="q2">
+        <div id="q2">
             <input type="radio" class="star" value="0" id="q2-r0" name="q2-rate">
             <label for="q2-r0">0</label>
 
@@ -64,7 +63,7 @@
             <input type="radio" class="star" value="4" id="q2-r4" name="q2-rate">
             <label for="q2-r4">4</label>
 
-            <input type="radio" class="star" value="5" id="q2-r5" name="q2-rate">
+            <input type="radio" class="star" value="5" id="q2-r5" name="q2-rate" checked>
             <label for="q2-r5">5</label>
 
             <input type="radio" class="star" value="6" id="q2-r6" name="q2-rate">
@@ -81,6 +80,10 @@
 
             <input type="radio" class="star" value="10" id="q2-r10" name="q2-rate">
             <label for="q2-r10">10</label>
+        </div>
+        <h4>Please, write me a very short review</h4>
+        <div id="review">
+            <textarea name="mini-review" id="mini-review"></textarea>
         </div>
 
         <button id="btn-submit">Submit</button>

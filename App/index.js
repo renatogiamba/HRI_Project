@@ -10,9 +10,9 @@ ws_9050.onopen = function() {
     console.log("[Pepper WS Server js]: Connection established");
     
     ws_9050.send(JSON.stringify({state: "ready"}));
-}
+};
 ws_9050.onmessage = function(event) {
-    humanMessage = JSON.parse(event.data)
+    humanMessage = JSON.parse(event.data);
 
     if (humanMessage.command != null) {
 		if (humanMessage.command === "close") {
@@ -68,7 +68,7 @@ ws_9050.onmessage = function(event) {
             changeScene(rules01);
         }
     }
-}
+};
 
 let waiting = {
     sceneName: "waiting",
