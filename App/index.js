@@ -119,7 +119,7 @@ let presentation = {
 
 let noGame = {
     sceneName: "noGame",
-    text: () => `Oh, that's OK. Have a nice day then!`,
+    text: () => "Oh, that's OK. Have a nice day then!",
     buttons: ["Thanks!"],
     colors: [BLUE],
     listeners: [

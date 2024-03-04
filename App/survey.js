@@ -38,4 +38,5 @@ document.getElementById("btn-submit").addEventListener("click", function(event) 
     scene.appendChild(button);
 
     document.querySelector("body").classList.add("thank-you");
+    ws_9030.send(JSON.stringify({say: "Thank you for your time. Have a nice day!"}));
 });

@@ -71,6 +71,8 @@ class PepperWSServer(tornado.websocket.WebSocketHandler):
                 self.write_message(json.dumps({"command": "game"}))
         elif "say" in message:
             pepper.say(message["say"])
+            if message["say"] == "Oh, that's OK. Have a nice day then!":
+                pepper.hello()
 
     @tornado.gen.coroutine
     def on_close(self):
@@ -160,6 +162,8 @@ class SurveyWSServer(tornado.websocket.WebSocketHandler):
     
     @tornado.gen.coroutine
     def on_message(self, message):
+        global pepper
+
         message = json.loads(message)
 
         if "state" in message:
@@ -171,6 +175,10 @@ class SurveyWSServer(tornado.websocket.WebSocketHandler):
                     "review": message["review"]
                 }) + "\n")
                 f.close()
+        elif "say" in message:
+            pepper.say(message["say"])
+            pepper.hello()
+
 
     @tornado.gen.coroutine
     def on_close(self):
