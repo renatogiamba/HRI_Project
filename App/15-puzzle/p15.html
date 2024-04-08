@@ -1,13 +1,26 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8">
-<title>15 Puzzle</title>
-<script src="p15.js"></script>
-<style>
-    html,body{padding:0; margin:0;padding-top:8vh;background:#222;color:#111}
-    .txt{color:#fff;text-align:center;font-size:5vh}
-    .board{padding:0;margin:auto;width:33vh;height:33vh}
-    .button, .empty{border:0;font-size:3.5vh;margin:0.5vh;padding:0;height:6vh;width:7.25vh;line-height:5vh;
-    vertical-align:middle;background:#fff;text-align:center;border-radius:3px;cursor:pointer;float:left}
-    .empty{background:#333;border:1px solid #111}
-</style>
-</head><body onload="start()"></body></html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N Puzzle</title>
+    <link rel="stylesheet" href="p15.css">
+    <script defer src="p15.js"></script>
+</head>
+<body>
+    <div class="board-container">
+        <div class="board"></div>
+    </div>
+    <div class="puzzle-size">
+        <label for="size">Size</label>
+        <select name="size" id="size" class="puzzle-size">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
+    </div>
+    <p class="txt">Clicks: 0</p>
+</body>
+</html>

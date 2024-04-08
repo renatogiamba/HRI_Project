@@ -1,0 +1,62 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    background: #222;
+    color: #111;
+}
+
+.board-container {
+    display: flex;
+    justify-content: center;
+}
+
+.board {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.row {
+    position: relative;
+    padding: 0;
+    display: inline-flex;
+    width: min-content;
+}
+
+.tile, .empty-tile {
+    position: relative;
+    border: 0;
+    font-size: 3.5vh;
+    margin: 0;
+    padding: 0;
+    height: 7.5vh;
+    width: 7.5vh;
+    background: #fff;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 3px solid #111;
+}
+
+.empty-tile {
+    background: #333;
+}
+
+label {
+    color: #fff;
+    padding-right: 3.5vh;
+}
+
+.txt {
+    color: #fff;
+    text-align: center;
+    font-size: 3.5vh;
+}
+
+.puzzle-size {
+    margin: auto;
+    text-align: center;
+    font-size: 3.5vh;
+}

@@ -1,4 +1,8 @@
-var board, zx, zy, clicks, possibles, clickCounter, oldzx = -1, oldzy = -1;
+var clicks = 0;
+var size = 2;
+var board = null;
+
+/*var board, zx, zy, clicks, possibles, clickCounter, oldzx = -1, oldzy = -1;
 function getPossibles() {
     var ii, jj, cx = [-1, 0, 1, 0], cy = [0, -1, 0, 1];
     possibles = [];
@@ -115,4 +119,63 @@ function start() {
     createBtns();
     createBoard();
     restart();
+}*/
+
+function createTiles() {
+    let board = document.querySelector(".board");
+
+    for (let i = 0; i < size; ++i) {
+        let row = document.createElement("div");
+        row.className = "row";
+        board.appendChild(row);
+
+        for (let j = 0; j < size; ++j) {
+            let tile = document.createElement("button");
+            tile.id = `tile-${j + i * size + 1}`;
+            tile.innerText = "prova";
+            tile.className = "tile";
+            row.appendChild(tile);
+        }
+    }
 }
+
+function createBoard() {
+    board = null;
+    board = new Int8Array(size * size);
+
+    for (let i = 0; i < size * size; ++i) {
+        board[i] = i + 1;
+    }
+}
+
+function updateTiles() {
+    for (let i = 0; i < size; ++i) {
+        for (let j = 0; j < size; ++j) {
+            let tile = document.getElementById(`tile-${j + i * size + 1}`);
+            let tileValue = board[j + i * size];
+            let isEmptyTile = tileValue < size * size;
+
+            tile.className = isEmptyTile ? "tile" : "empty-tile";
+            tile.innerText = isEmptyTile ? `${tileValue}` : "";
+        }
+    }
+}
+
+function startGame() {
+    createTiles();
+    createBoard();
+    updateTiles();
+}
+
+let size_selector = document.getElementById("size");
+size_selector.addEventListener("change", function() {
+    size = parseInt(size_selector.value);
+
+    if (document.querySelector(".board").childElementCount > 0) {
+        document.querySelector(".board").replaceChildren();
+        startGame();
+    }
+});
+size = parseInt(size_selector.value);
+
+startGame();
