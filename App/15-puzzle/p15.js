@@ -3,6 +3,29 @@ var size = 2;
 var board = null;
 var emptyTile = null;
 
+var ws_9020 = new WebSocket("ws://localhost:9020/websocketserver");
+ws_9020.onopen = function() {
+    console.log("[Pepper N-Puzzle WS Server js]: Connection established");
+};
+ws_9020.onmessage = function(event) {
+    humanMessage = JSON.parse(event.data);
+
+	if (humanMessage.command != null) {
+		if (humanMessage.command === "close") {
+			ws_9020.close();
+			console.log("[Pepper N-Puzzle WS Server js]: Connection closed");
+		}
+	}
+	else if (humanMessage.action != null) {
+		let button_idx = humanMessage.action === 0 ? 1 : 0;
+		let button = game.buttonContainer.children[button_idx];
+
+		button.color = "#ff0000";
+		setTimeout(() => button.color = "#fff", 1000);
+	}
+};
+
+
 function checkFinished() {
     return board.every((elem,idx)=>idx==board.length-1||board[idx]<=board[idx+1]);
 }
@@ -80,7 +103,7 @@ function shuffle() {
             return numInvs%2 == 0;
         else {     
             let pos = puzzle.findLastIndex(elem => elem == puzzle.length);
-            if (pos & 1)
+            if ((pos+1) & 1)
                 return numInvs%2 == 0;
             else
                 return numInvs%2 == 1;

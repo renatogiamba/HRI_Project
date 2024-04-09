@@ -5,8 +5,9 @@ import unified_planning.shortcuts
 from typing import *
 
 def generate_N_puzzle(
-        n: int, tile_idx_matrix: List[List[int]]
+        tile_matrix: List[List[int]]
     ) -> unified_planning.model.Problem:
+    n = len(tile_matrix)
     tile_type = unified_planning.shortcuts.UserType("tile")
     coord_type = unified_planning.shortcuts.UserType("coord")
     bool_type = unified_planning.shortcuts.BoolType()
@@ -54,8 +55,9 @@ def generate_N_puzzle(
 
     for i in range(n):
         for j in range(n):
-            tile_idx = tile_idx_matrix[i][j]
-            if tile_idx == -1:
+            tile_value = tile_matrix[i][j]
+            tile_idx = tile_value -1
+            if tile_value == n * n:
                 problem.set_initial_value(empty(coords[i], coords[j]), True)
             else:
                 problem.set_initial_value(at(tiles[tile_idx], coords[i], coords[j]), True)
