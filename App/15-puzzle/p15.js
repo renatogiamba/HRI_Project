@@ -25,6 +25,17 @@ ws_9020.onmessage = function(event) {
 	}
 };
 
+function difficulty2size(difficulty) {
+    if (difficulty === "Easy")
+        return 3;
+    else if (difficulty === "Medium")
+        return 4;
+    else if (difficulty === "Hard")
+        return 5;
+    else
+        return 3;
+}
+
 function checkFinished() {
     return board.every(
         (elem, idx) => idx == board.length - 1 || board[idx] <= board[idx + 1]
@@ -47,7 +58,7 @@ function onClickTile(event){
         updateTiles();
         ++moves;
 
-        let moveString = document.getElementById('moves');
+        let moveString = document.getElementById("moves");
         moveString.innerText = `Moves: ${moves}`;
     }
     if (checkFinished())
@@ -138,11 +149,11 @@ function startGame() {
     updateTiles();
     moves = 0;
 
-    let moveString = document.getElementById('moves');
+    let moveString = document.getElementById("moves");
     moveString.innerText = `Moves: ${moves}`;
 }
 
-let size_selector = document.getElementById("size");
+let size_selector = document.getElementById("level");
 size_selector.addEventListener("change", function() {
     size = parseInt(size_selector.value);
 
@@ -151,6 +162,8 @@ size_selector.addEventListener("change", function() {
         startGame();
     }
 });
-size = parseInt(size_selector.value);
+size = difficulty2size(localStorage.getItem("N-Puzzle-JS-difficulty") || "Easy");
+let level_option = document.querySelector(`#level option[value="${size}"]`);
+level_option.selected = true;
 
 startGame();
