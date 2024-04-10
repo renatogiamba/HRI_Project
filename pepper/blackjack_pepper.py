@@ -182,14 +182,74 @@ class BlackjackPepper():
         self._instance.normalPosture()
     
     def slide_tile_left(self):
-        pass
+        motion_service = self._instance.motion_service
+
+        joint_names = [
+                "RElbowRoll", "RElbowYaw", "RHand", "RShoulderPitch", 
+                "RShoulderRoll", "RWristYaw"
+                ]
+        joint_values = [1.38, 1.23, 0.92, 1.20, -0.25, -1.22]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.8, True)
+     
+        motion_service.angleInterpolation("RHand", 0.52, 0.3, True)
+     
+        joint_names = ["RElbowRoll", "RElbowYaw", "RShoulderRoll", "RWristYaw"]
+        joint_values = [1.30, 1.28, -0.92, -0.60]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.6, True)
+
+        self._instance.normalPosture()
 
     def slide_tile_right(self):
-        pass
+        motion_service = self._instance.motion_service
+
+        joint_names = [
+                "RElbowRoll", "RElbowYaw", "RHand", "RShoulderPitch", 
+                "RShoulderRoll", "RWristYaw"
+                ]
+        joint_values = [1.30, 1.28,  0.92, 1.20, -0.92, -0.60]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.8, True)
+     
+        motion_service.angleInterpolation("RHand", 0.52, 0.3, True)
+     
+        joint_names = ["RElbowRoll", "RElbowYaw", "RShoulderRoll", "RWristYaw"]
+        joint_values = [1.38, 1.23, -0.25, -1.22]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.6, True)
+
+        self._instance.normalPosture()
 
     def slide_tile_up(self):
-        pass
+        motion_service = self._instance.motion_service
+
+        joint_names = [
+                "RElbowRoll", "RElbowYaw", "RHand", "RShoulderPitch", 
+                "RShoulderRoll", "RWristYaw"
+                ]
+        joint_values = [1.34, 1.39, 0.92, 1.20, -0.26, -1.17]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.8, True)
+     
+        motion_service.angleInterpolation("RHand", 0.52, 0.3, True)
+     
+        joint_names = ["RElbowRoll", "RShoulderPitch"]
+        joint_values = [0.91, 0.83]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.6, True)
+
+        self._instance.normalPosture()
 
     def slide_tile_down(self):
-        pass
+        motion_service = self._instance.motion_service
+
+        joint_names = [
+                "RElbowRoll", "RElbowYaw", "RHand", "RShoulderPitch", 
+                "RShoulderRoll", "RWristYaw"
+                ]
+        joint_values = [0.91, 1.39, 0.92, 0.83, -0.26, -1.17]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.8, True)
+     
+        motion_service.angleInterpolation("RHand", 0.52, 0.3, True)
+     
+        joint_names = ["RElbowRoll", "RShoulderPitch"]
+        joint_values = [1.34, 1.20]
+        motion_service.angleInterpolation(joint_names, joint_values, 0.6, True)
+
+        self._instance.normalPosture()
     
