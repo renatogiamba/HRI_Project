@@ -10,6 +10,7 @@ import tornado.web
 import pddl_planning
 
 n_puzzle_ws_server = None
+
 class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
     def open(self):

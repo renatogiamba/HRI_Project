@@ -21,7 +21,7 @@ ws_9050.onmessage = function(event) {
 		}
         else if (humanMessage.command === "game") {
             console.log("[Pepper WS Server js]: Game started");
-            window.location.href = "http://127.0.0.1:5500/App/game/index.html";
+            window.location.href = "http://127.0.0.1:5500/App/15-puzzle/p15.html";
         }
 	}
     if (humanMessage.scene != null) {
@@ -65,7 +65,7 @@ ws_9050.onmessage = function(event) {
             ws_9050.send(JSON.stringify({say: recap.text()}));
         }
         else if (humanMessage.scene === "rules") {
-            changeScene(rules01);
+            changeScene(rules);
         }
     }
 };
@@ -82,12 +82,12 @@ let backPersonScanned = {
 
 let frontPersonScanned = {
     sceneName: "frontPersonScanned",
-    text: () => "Hi! I'm Pepper the Black Jack Buddy."
+    text: () => "Hi! I'm Pepper the N-Puzzle Buddy."
 };
 
 let welcome = {
     sceneName: "welcome",
-    text: () => "Do you want to play a Black Jack match together with me?",
+    text: () => "Do you want to play a N-Puzzle match together with me?",
     buttons: ["Yes", "No"],
     colors: [GREEN, RED],
     listeners: [
@@ -111,7 +111,7 @@ let presentation = {
         () => {
             username = document.querySelector(".input-name").value;
             data.username = username;
-            localStorage.setItem("BlackJackJs-userName", username);
+            localStorage.setItem("N-PuzzleJS-userName", username);
             ws_9050.send(JSON.stringify({state: "person presented"}));
         }
     ]
@@ -129,7 +129,7 @@ let noGame = {
 
 let everPlayed = {
     sceneName: "everPlayed",
-    text: () => `${username}, have you ever played Black Jack?`,
+    text: () => `${username}, have you ever played N-Puzzle?`,
     buttons: ["Yes", "No"],
     colors: [GREEN, RED],
     listeners: [
@@ -161,48 +161,12 @@ let recap = {
     ]
 };
 
-let rules01 = {
-    sceneName: "rules01",
-    text: () => `The goal of the game is to win money against the dealer creating hands with a better score than the ones of the dealer.
-    To win, the player must have a higher score than the one of the dealer but not exceeding 21, otherwise he busts and loses, or
-    he must stop at a score hoping that the dealer will bust.`,
-    buttons: ["Next"],
-    colors: [BLUE],
-    listeners: [
-        () => changeScene(rules02)
-    ]
-};
-
-let rules02 = {
-    sceneName: "rules02",
-    text: () => `After a bet, the dealer distributes two visible cards at the player and two cards to himself, one visible, one covered.
-    Then, on his turn, the player can HIT (take another card) or STAND (stop taking cards and end his turn).
-    After, the dealer does the same, with the constraint that if he reaches a score of 17 or higher, he MUST STAND.`,
-    buttons: ["Next"],
-    colors: [BLUE],
-    listeners: [
-        () => changeScene(rules03)
-    ]
-};
-
-let rules03 = {
-    sceneName: "rules03",
-    text: () => `After the turns, the player and the dealer scores are compared. The one with the highest score wins, the other loses.
-    If the scores are equal, that's a draw. If the player wins, the dealer must pay the player the amount bet or 1.5 times the amount
-    bet in case of Black Jack. If the dealer wins, the player must pay the dealer the amount bet. In case of draw, the player retains
-    the amount bet.`,
-    buttons: ["Next"],
-    colors: [BLUE],
-    listeners: [
-        () => changeScene(rules04)
-    ]
-};
-
-let rules04 = {
-    sceneName: "rules04",
-    text: () => `The scores are determined summing all the values of the cards hand. Cards from 2 to 10 have a value equal to their
-    nominal value, face cards (J, Q, K) have a value of 10, As have a value of 1 or 11 chosen in a way to not bust.
-    BLACK JACK is done by having a score of 21 with EXACTLY two cards: an A and a 10-value card (10, J, Q, K).`,
+let rules = {
+    sceneName: "rules",
+    text: () => `The game is made of a N by N grid filled with tiles numbered from 1 to N^2-1,
+    and with a single empty cell. At the start, the tiles are randomly scrambled and
+    the goal of the game is to slide them back in consecutive order with the empty tile on
+    the bottom right.`,
     buttons: ["Got it! Let's play the game"],
     colors: [BLUE],
     listeners: [
@@ -375,67 +339,7 @@ function changeScene(props, flag='') {
             }
         }, 200);
     }
-    else if (currentScene === "rules01") {
-        textAnimation(props.text());
-        let interval = setInterval(() => {
-            if (doneWriting) {
-                doneWriting = false;
-                let button = document.createElement("button");
-
-                button.classList.add("button");
-                button.innerHTML = props.buttons[0];
-                button.style.backgroundColor = props.colors[0];
-                button.addEventListener("click", props.listeners[0]);
-
-                buttonContainer.appendChild(button);
-                buttonContainer.classList.remove("buttons-out");
-                buttonContainer.classList.add("buttons-in");
-
-                clearInterval(interval);
-            }
-        }, 200);
-    }
-    else if (currentScene === "rules02") {
-        textAnimation(props.text());
-        let interval = setInterval(() => {
-            if (doneWriting) {
-                doneWriting = false;
-                let button = document.createElement("button");
-
-                button.classList.add("button");
-                button.innerHTML = props.buttons[0];
-                button.style.backgroundColor = props.colors[0];
-                button.addEventListener("click", props.listeners[0]);
-
-                buttonContainer.appendChild(button);
-                buttonContainer.classList.remove("buttons-out");
-                buttonContainer.classList.add("buttons-in");
-
-                clearInterval(interval);
-            }
-        }, 200);
-    }
-    else if (currentScene === "rules03") {
-        textAnimation(props.text());
-        let interval = setInterval(() => {
-            if (doneWriting) {
-                doneWriting = false;
-                let button = document.createElement("button");
-
-                button.classList.add("button");
-                button.innerHTML = props.buttons[0];
-                button.style.backgroundColor = props.colors[0];
-                button.addEventListener("click", props.listeners[0]);
-
-                buttonContainer.appendChild(button);
-                buttonContainer.classList.remove("buttons-out");
-                buttonContainer.classList.add("buttons-in");
-
-                clearInterval(interval);
-            }
-        }, 200);
-    }
-    else if (currentScene === "rules04") {
+    else if (currentScene === "rules") {
         textAnimation(props.text());
         let interval = setInterval(() => {
             if (doneWriting) {
