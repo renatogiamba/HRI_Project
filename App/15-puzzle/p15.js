@@ -162,8 +162,27 @@ size_selector.addEventListener("change", function() {
         startGame();
     }
 });
+
 size = difficulty2size(localStorage.getItem("N-Puzzle-JS-difficulty") || "Easy");
+
 let level_option = document.querySelector(`#level option[value="${size}"]`);
 level_option.selected = true;
+
+let username = document.getElementById("user");
+username.innerHTML += " ";
+username.innerHTML += (localStorage.getItem("N-Puzzle-JS-username") || "GUEST");
+
+let pepper_help_btn = document.getElementById("pepper-help");
+pepper_help_btn.addEventListener("click", function(event) {
+    let gameTileMatrix = [];
+
+    for (let i = 0; i < size; ++i) {
+        gameTileMatrix.push([]);
+
+        for (let j = 0; j < size; ++j)
+            gameTileMatrix[i].push(board[j + i * size]);
+    }
+    ws_9020.send(JSON.stringify({"gameTileMatrix": gameTileMatrix}));
+})
 
 startGame();
