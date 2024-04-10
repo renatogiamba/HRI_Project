@@ -1,5 +1,5 @@
 var moves = 0;
-var size = 2;
+var size = 3;
 var board = null;
 var emptyTile = null;
 
@@ -25,14 +25,17 @@ ws_9020.onmessage = function(event) {
 	}
 };
 
-
 function checkFinished() {
-    return board.every((elem,idx)=>idx==board.length-1||board[idx]<=board[idx+1]);
+    return board.every(
+        (elem, idx) => idx == board.length - 1 || board[idx] <= board[idx + 1]
+    );
 }
+
 function onClickTile(event){
     let tile = event.target;
     let iDiff = Math.abs(tile.i - emptyTile.i);
     let jDiff = Math.abs(tile.j - emptyTile.j);
+
     if (iDiff > 1 || jDiff > 1)
         return;
     else if (iDiff == 1 && jDiff > 0)
@@ -40,9 +43,10 @@ function onClickTile(event){
     else if (jDiff == 1 && iDiff > 0)
         return;
     else {
-        [board[tile.pos],board[emptyTile.pos]] = [board[emptyTile.pos],board[tile.pos]];
+        [board[tile.pos], board[emptyTile.pos]] = [board[emptyTile.pos], board[tile.pos]];
         updateTiles();
         ++moves;
+
         let moveString = document.getElementById('moves');
         moveString.innerText = `Moves: ${moves}`;
     }
@@ -62,21 +66,24 @@ function createBoard() {
 function updateTiles() {
     let divBoard = document.querySelector(".board");
     divBoard.replaceChildren();
+
     for (let i = 0; i < size; ++i) {
         let row = document.createElement("div");
         row.className = "row";
         divBoard.appendChild(row);
+
         for (let j = 0; j < size; ++j) {
             let tile = document.createElement("button");
             let tileValue = board[j+i*size];
             let isEmptyTile = tileValue == board.length;
+
             tile.id = `tile-${tileValue}`;
             tile.pos = j + i * size;
             tile.i = i;
             tile.j = j;
             tile.innerText = isEmptyTile ?  "" : `${tileValue}`;
             tile.className = isEmptyTile ? "empty-tile" : "tile";
-            tile.addEventListener("click",onClickTile);
+            tile.addEventListener("click", onClickTile);
             row.appendChild(tile);
             if (isEmptyTile){
                 emptyTile = tile;
@@ -88,32 +95,38 @@ function updateTiles() {
 function shuffle() {
     function countInversions(arr) {
         let numInvs = 0;
+
         for (let i = 0; i < arr.length - 1; ++i) {
             for (let j = i + 1; j < arr.length; ++j) {
                 if (arr[i] != arr.length && arr[j] != arr.length && arr[i] > arr[j])
                     ++numInvs;
             }
         }
+
         return numInvs;
     }
+
     function isSolvable(puzzle) {
         const numInvs = countInversions(puzzle);
 
         if (puzzle.length & 1)
-            return numInvs%2 == 0;
+            return numInvs % 2 == 0;
         else {     
-            let pos = puzzle.findLastIndex(elem => elem == puzzle.length);
-            if ((pos+1) & 1)
-                return numInvs%2 == 0;
+            const pos = puzzle.findLastIndex(elem => elem == puzzle.length) + 1;
+            if (pos & 1)
+                return numInvs % 2 == 0;
             else
-                return numInvs%2 == 1;
+                return numInvs % 2 == 1;
         }
     }
+
     let solvable = false;
+
     while (!solvable) {
-        for( let i = 0; i < board.length; ++i) {
+        for(let i = 0; i < board.length; ++i) {
             const j = Math.floor(Math.random() * board.length);
-            [board[i],board[j]]= [board[j],board[i]];
+
+            [board[i], board[j]] = [board[j], board[i]];
         }
         solvable = isSolvable(board);
     }
@@ -124,6 +137,9 @@ function startGame() {
     shuffle();
     updateTiles();
     moves = 0;
+
+    let moveString = document.getElementById('moves');
+    moveString.innerText = `Moves: ${moves}`;
 }
 
 let size_selector = document.getElementById("size");
