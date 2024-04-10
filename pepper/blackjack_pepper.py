@@ -180,3 +180,16 @@ class BlackjackPepper():
         motion_service.angleInterpolation("HeadYaw", 0.30, 0.4, True)
 
         self._instance.normalPosture()
+    
+    def slide_tile_left(self):
+        pass
+
+    def slide_tile_right(self):
+        pass
+
+    def slide_tile_up(self):
+        pass
+
+    def slide_tile_down(self):
+        pass
+    

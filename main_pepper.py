@@ -16,8 +16,8 @@ import blackjack_agent
 import blackjack_pepper
 
 pepper_ws_server = None
-blackjack_ws_server = None
-survey_ws_server = None
+#blackjack_ws_server = None
+#survey_ws_server = None
 
 class PepperWSServer(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
@@ -66,8 +66,10 @@ class PepperWSServer(tornado.websocket.WebSocketHandler):
                 if message["buttonPressed"] == "Yes":
                     self.write_message(json.dumps({"scene": "rules"}))
                 elif message["buttonPressed"] == "No":
-                    self.write_message(json.dumps({"command": "game"}))
+                    self.write_message(json.dumps({"scene": "level"}))
             elif message["state"] == "got rules":
+                self.write_message(json.dumps({"scene": "level"}))
+            elif message["state"] == "got level":
                 self.write_message(json.dumps({"command": "game"}))
         elif "say" in message:
             pepper.say(message["say"])
@@ -90,7 +92,7 @@ class PepperWSServer(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-def convertValue(value):
+'''def convertValue(value):
     if value in ['J','Q','K']:
         return 10
     elif value == 'A':
@@ -194,7 +196,7 @@ class SurveyWSServer(tornado.websocket.WebSocketHandler):
   
     @tornado.gen.coroutine
     def check_origin(self, origin):
-        return True
+        return True'''
 
 if __name__ == "__main__":
     global pepper
@@ -203,7 +205,7 @@ if __name__ == "__main__":
 
     pepper = blackjack_pepper.BlackjackPepper()
 
-    learning_rate = 0.01
+    '''learning_rate = 0.01
     n_episodes = 2
     start_epsilon = 1.0
     epsilon_decay = start_epsilon / (n_episodes / 2) 
@@ -216,7 +218,7 @@ if __name__ == "__main__":
     )
     agent.q_values = numpy.loadtxt('blackjack_q_values/q_values_5M.txt')
 
-    time.sleep(5.)
+    time.sleep(5.)'''
 
     pepper_web_app = tornado.web.Application([
         (r"/websocketserver", PepperWSServer)
@@ -225,7 +227,7 @@ if __name__ == "__main__":
     pepper_http_server.listen("9050")
     print "[Pepper App py]: Pepper WS server listening on port 9050"
 
-    blackjack_web_app = tornado.web.Application([
+    '''blackjack_web_app = tornado.web.Application([
         (r"/websocketserver", BlackjackWSServer)
     ])
     blackjack_http_server = tornado.httpserver.HTTPServer(blackjack_web_app)
@@ -238,13 +240,14 @@ if __name__ == "__main__":
     survey_http_server = tornado.httpserver.HTTPServer(survey_web_app)
     survey_http_server.listen("9030")
     print "[Pepper App py]: Pepper Survey WS server listening on port 9030"
+    '''
 
     try:
         tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
         print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper WS server..."
-        print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper Blackjack WS server..."
-        print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper Survey WS server..."
+        #print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper Blackjack WS server..."
+        #print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper Survey WS server..."
     
     if pepper_ws_server is not None:
         try:
@@ -253,7 +256,7 @@ if __name__ == "__main__":
                 pepper_ws_server.close()
         except tornado.websocket.WebSocketClosedError:
             pass
-        try:
+        '''try:
             if blackjack_ws_server is not None:
                 blackjack_ws_server.write_message(json.dumps({"command": "close"}))
                 blackjack_ws_server.close()
@@ -264,9 +267,9 @@ if __name__ == "__main__":
                 survey_ws_server.write_message(json.dumps({"command": "close"}))
                 survey_ws_server.close()
         except tornado.websocket.WebSocketClosedError:
-            pass
+            pass'''
     print "[Pepper App py]: Pepper WS server quit"
-    print "[Pepper App py]: Pepper Blackjack WS server quit"
-    print "[Pepper App py]: Pepper Survey WS server quit"
+    #print "[Pepper App py]: Pepper Blackjack WS server quit"
+    #print "[Pepper App py]: Pepper Survey WS server quit"
 
     pepper_cmd.end()

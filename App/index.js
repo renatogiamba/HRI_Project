@@ -68,6 +68,10 @@ ws_9050.onmessage = function(event) {
         else if (humanMessage.scene === "rules") {
             changeScene(rules);
         }
+        else if (humanMessage.scene === "level") {
+            changeScene(level);
+            ws_9050.send(JSON.stringify({say: level.text()}));
+        }
     }
 };
 
@@ -112,7 +116,7 @@ let presentation = {
         () => {
             username = document.querySelector(".input-name").value;
             data.username = username;
-            localStorage.setItem("N-PuzzleJS-userName", username);
+            localStorage.setItem("N-Puzzle-JS-userName", username);
             ws_9050.send(JSON.stringify({state: "person presented"}));
         }
     ]
@@ -174,6 +178,28 @@ let rules = {
         () => ws_9050.send(JSON.stringify({state: "got rules"})),
     ]
 };
+
+let level = {
+    sceneName: "level",
+    text: () => `What kind of difficulty do you want to play? Remember that you can also
+    modify it during the game...`,
+    buttons: ["Easy", "Medium", "Hard"],
+    colors: [GREEN, YELLOW, RED],
+    listeners: [
+        () => {
+            localStorage.setItem("N-Puzzle-JS-difficulty", "Easy");
+            ws_9050.send(JSON.stringify({state: "got level"}));
+        },
+        () => {
+            localStorage.setItem("N-Puzzle-JS-difficulty", "Medium");
+            ws_9050.send(JSON.stringify({state: "got level"}));
+        },
+        () => {
+            localStorage.setItem("N-Puzzle-JS-difficulty", "Hard");
+            ws_9050.send(JSON.stringify({state: "got level"}));
+        }
+    ]
+}
 
 function textAnimation(sentence) {
     let target = document.querySelector('.welcome-text')
@@ -355,6 +381,28 @@ function changeScene(props, flag='') {
                 buttonContainer.appendChild(button);
                 buttonContainer.classList.remove("buttons-out");
                 buttonContainer.classList.add("buttons-in");
+
+                clearInterval(interval);
+            }
+        }, 200);
+    }
+    else if (currentScene === "level") {
+        textAnimation(props.text());
+        let interval = setInterval(() => {
+            if (doneWriting) {
+                doneWriting = false;
+                for (let i = 0; i < props.buttons.length; ++i) {
+                    let button = document.createElement("button");
+    
+                    button.classList.add("button");
+                    button.innerHTML = props.buttons[i];
+                    button.style.backgroundColor = props.colors[i];
+                    button.addEventListener("click", props.listeners[i]);
+    
+                    buttonContainer.appendChild(button);
+                    buttonContainer.classList.remove("buttons-out");
+                    buttonContainer.classList.add("buttons-in");
+                }
 
                 clearInterval(interval);
             }
