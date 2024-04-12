@@ -17,11 +17,11 @@ ws_9020.onmessage = function(event) {
 		}
 	}
 	else if (humanMessage.move != null) {
-		let tileIdx = humanMessage.move;
+		const tileIdx = humanMessage.move;
 		let movingTile = document.getElementById(`tile-${tileIdx}`);
-        movingTile.style.backgroundColor(GREEN)
+        movingTile.style.backgroundColor = "green";
 
-		setTimeout(() => movingTile.style.backgroundColor() = "#fff", 3000);
+		setTimeout(() => movingTile.style.backgroundColor = "#fff", 2000);
 	}
 };
 
@@ -42,7 +42,7 @@ function checkFinished() {
     );
 }
 
-function onClickTile(event){
+function onClickTile(event) {
     let tile = event.target;
     let iDiff = Math.abs(tile.i - emptyTile.i);
     let jDiff = Math.abs(tile.j - emptyTile.j);
