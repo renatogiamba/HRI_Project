@@ -16,7 +16,6 @@ import blackjack_agent
 import blackjack_pepper
 
 pepper_ws_server = None
-#blackjack_ws_server = None
 #survey_ws_server = None
 
 class PepperWSServer(tornado.websocket.WebSocketHandler):
@@ -92,70 +91,7 @@ class PepperWSServer(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-'''def convertValue(value):
-    if value in ['J','Q','K']:
-        return 10
-    elif value == 'A':
-        return 1
-    else: return value
-
-def usable_ace(hand):
-        return int(1 in hand and sum(hand) + 10 <= 21)
-    
-def sum_hand(hand):
-        sum_hand_ = sum(hand)
-
-        return sum_hand_ + 10 if usable_ace(hand) else sum_hand_
-
-class BlackjackWSServer(tornado.websocket.WebSocketHandler):
-    @tornado.gen.coroutine
-    def open(self):
-        global blackjack_ws_server
-        blackjack_ws_server = self
-        print '[Pepper Blackjack WS Server py]: Connection established'
-    
-    @tornado.gen.coroutine
-    def on_message(self, message):
-        global pepper, agent
-
-        message = json.loads(message)
-
-        if "gameState" in message:
-            bankCardValue = message["gameState"]["bankCardValues"][0]
-            bankCardValue = convertValue(bankCardValue)
-            playerCardValues = message["gameState"]["playerCardValues"]
-            playerCardValues = list(map(convertValue,playerCardValues))
-            obs = (
-                sum_hand(playerCardValues),
-                bankCardValue,
-                usable_ace(playerCardValues)
-            ) 
-            action = agent.act(obs)
-            pepper.say("I suggest: " + ("Stand" if action == 0 else "Hit"))
-            self.write_message(json.dumps({"action": action}))
-        elif "pose" in message:
-            if message["pose"] == "win":
-                pepper.victory()
-            elif message["pose"] == "lose":
-                pepper.sad()
-
-    @tornado.gen.coroutine
-    def on_close(self):
-        print '[Pepper Blackjack WS Server py]: Connection closed'
-  
-    @tornado.gen.coroutine
-    def on_ping(self, data):
-        print 'ping received: %s' %(data)
-  
-    @tornado.gen.coroutine
-    def on_pong(self, data):
-        print 'pong received: %s' %(data)
-  
-    @tornado.gen.coroutine
-    def check_origin(self, origin):
-        return True
-
-class SurveyWSServer(tornado.websocket.WebSocketHandler):
+'''class SurveyWSServer(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
     def open(self):
         global survey_ws_server
@@ -205,21 +141,6 @@ if __name__ == "__main__":
 
     pepper = blackjack_pepper.BlackjackPepper()
 
-    '''learning_rate = 0.01
-    n_episodes = 2
-    start_epsilon = 1.0
-    epsilon_decay = start_epsilon / (n_episodes / 2) 
-    final_epsilon = 0.1
-    agent = blackjack_agent.BlackjackAgent(
-        learning_rate = learning_rate,
-        initial_epsilon = start_epsilon,
-        epsilon_decay = epsilon_decay,  
-        final_epsilon = final_epsilon
-    )
-    agent.q_values = numpy.loadtxt('blackjack_q_values/q_values_5M.txt')
-
-    time.sleep(5.)'''
-
     pepper_web_app = tornado.web.Application([
         (r"/websocketserver", PepperWSServer)
     ])
@@ -227,13 +148,7 @@ if __name__ == "__main__":
     pepper_http_server.listen("9050")
     print "[Pepper App py]: Pepper WS server listening on port 9050"
 
-    '''blackjack_web_app = tornado.web.Application([
-        (r"/websocketserver", BlackjackWSServer)
-    ])
-    blackjack_http_server = tornado.httpserver.HTTPServer(blackjack_web_app)
-    blackjack_http_server.listen("9020")
-    print "[Pepper App py]: Pepper Blakcjack WS server listening on port 9020"
-
+    '''
     survey_web_app = tornado.web.Application([
         (r"/websocketserver", SurveyWSServer)
     ])
@@ -246,7 +161,6 @@ if __name__ == "__main__":
         tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
         print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper WS server..."
-        #print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper Blackjack WS server..."
         #print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper Survey WS server..."
     
     if pepper_ws_server is not None:
@@ -256,12 +170,7 @@ if __name__ == "__main__":
                 pepper_ws_server.close()
         except tornado.websocket.WebSocketClosedError:
             pass
-        '''try:
-            if blackjack_ws_server is not None:
-                blackjack_ws_server.write_message(json.dumps({"command": "close"}))
-                blackjack_ws_server.close()
-        except tornado.websocket.WebSocketClosedError:
-            pass
+        '''
         try:
             if survey_ws_server is not None:
                 survey_ws_server.write_message(json.dumps({"command": "close"}))
@@ -269,7 +178,6 @@ if __name__ == "__main__":
         except tornado.websocket.WebSocketClosedError:
             pass'''
     print "[Pepper App py]: Pepper WS server quit"
-    #print "[Pepper App py]: Pepper Blackjack WS server quit"
     #print "[Pepper App py]: Pepper Survey WS server quit"
 
     pepper_cmd.end()
