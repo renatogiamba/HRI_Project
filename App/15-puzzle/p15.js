@@ -16,12 +16,12 @@ ws_9020.onmessage = function(event) {
 			console.log("[Pepper N-Puzzle WS Server js]: Connection closed");
 		}
 	}
-	else if (humanMessage.action != null) {
-		let button_idx = humanMessage.action === 0 ? 1 : 0;
-		let button = game.buttonContainer.children[button_idx];
+	else if (humanMessage.move != null) {
+		let tileIdx = humanMessage.move;
+		let movingTile = document.getElementById(`tile-${tileIdx}`);
+        movingTile.style.backgroundColor(GREEN)
 
-		button.color = "#ff0000";
-		setTimeout(() => button.color = "#fff", 1000);
+		setTimeout(() => movingTile.style.backgroundColor() = "#fff", 3000);
 	}
 };
 
