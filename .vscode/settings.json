@@ -1,7 +1,8 @@
 {
     "liveServer.settings.CustomBrowser": "firefox:PrivateMode",
     "liveServer.settings.ignoreFiles": [
-        "surveys/**"
+        "surveys/**",
+        "output.sas"
     ],
     "liveServer.settings.port": 5500,
     "liveServer.settings.root": "/"

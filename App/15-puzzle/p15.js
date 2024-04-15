@@ -61,8 +61,10 @@ function onClickTile(event) {
         let moveString = document.getElementById("moves");
         moveString.innerText = `Moves: ${moves}`;
     }
-    if (checkFinished())
-        alert('DONEEE');
+    if (checkFinished()) {
+        let game_over_dialog = document.getElementById("game-over");
+        game_over_dialog.showModal();
+    }
 }
 
 function createBoard() {
@@ -184,5 +186,22 @@ pepper_help_btn.addEventListener("click", function(event) {
     }
     ws_9020.send(JSON.stringify({"gameTileMatrix": gameTileMatrix}));
 })
+
+let game_over_dialog = document.getElementById("game-over");
+let game_over_dialog_play_btn = document.getElementById("game-over-play");
+game_over_dialog_play_btn.addEventListener("click", function() {
+    game_over_dialog.close();
+    window.location.reload();
+});
+let game_over_dialog_survey_btn = document.getElementById("game-over-survey");
+game_over_dialog_survey_btn.addEventListener("click", function() {
+    game_over_dialog.close();
+    window.location.href = "http://127.0.0.1:5500/App/survey.html";
+});
+
+let quit_btn = document.getElementById("quit");
+quit_btn.addEventListener("click", function() {
+    window.location.href = "http://127.0.0.1:5500/App/survey.html";
+});
 
 startGame();

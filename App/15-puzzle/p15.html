@@ -10,6 +10,14 @@
 <body>
     <div class="board-container">
         <div class="board"></div>
+        <dialog id="game-over">
+            Wow, we won!
+            <p></p>
+            Would you like to play again or to go to the survey?
+            <p></p>
+            <button id="game-over-play">Play Again</button>
+            <button id="game-over-survey">Go to the Survey</button>
+        </dialog>
     </div>
     <div class="puzzle-level">
         <label for="level">Level (Size)</label>
@@ -23,6 +31,8 @@
     <p class="txt" id="user">Human:</p>
     <div class="board-container">
         <button id="pepper-help">Get Helped by Pepper!</button>
+        <span style="padding: 10px"></span>
+        <button id="quit">Quit Game</button>
     </div>
 </body>
 </html>

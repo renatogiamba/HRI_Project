@@ -2,37 +2,15 @@ import json
 import numpy
 import os
 import sys
-import threading
 import time
 import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
+import pddl_planning
 
 n_puzzle_ws_server = None
 run = True
-
-class PlannerWSClient():
-    def __init__(self, message, ws_server):
-        self.message = message
-        self.ws_server = ws_server
-        self.ws_client = None
-        self.connect()
-    
-    @tornado.gen.coroutine
-    def connect(self):
-        self.ws_client = yield tornado.websocket.websocket_connect(
-            "ws://localhost:9120/websocketserver", on_message_callback=self.on_message
-        )
-        self.ws_client.write_message(self.message)
-    
-    def on_message(self, message):
-        message = json.loads(message)
-
-        if "move" in message:
-            print("N-Puzzle PlannerClient: ")
-            print(message)
-            self.ws_server.write_message(json.dumps(message))
 
 class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
     def open(self):
@@ -42,11 +20,19 @@ class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
     
     def on_message(self, message):
         message = json.loads(message)
-        print("N-Puzzle: ")
-        print(message)
 
         if "gameTileMatrix" in message:
-            PlannerWSClient(json.dumps(message), self)
+            print("[N-Puzzle WS Server py]: Start planning...")
+            problem = pddl_planning.generate_N_puzzle(message["gameTileMatrix"])
+            opt = len(message["gameTileMatrix"]) == 3
+            moves = pddl_planning.solve_N_puzzle(problem, opt)
+            print("[N-Puzzle WS Server py]: Planning finished...")
+            if len(moves) < 2:
+                self.write_message(json.dumps({"move": 0}))
+                return
+            first_move = moves[1]
+            tile = int(first_move.split("(")[1].split(",")[0].split("_")[1])
+            self.write_message(json.dumps({"move": tile}))
         #elif "pose" in message:
         #    if message["pose"] == "win":
         #        pepper.victory()
@@ -65,17 +51,8 @@ class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-def main_loop(data):
-    global run
-
-    while (run):
-        time.sleep(1.)
-
 def main():
     global run
-
-    t = threading.Thread(target=main_loop, args=(None,))
-    t.start()
 
     npuzzle_web_app = tornado.web.Application([
         (r"/websocketserver", NPuzzleWSServer)
