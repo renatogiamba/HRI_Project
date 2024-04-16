@@ -46,6 +46,11 @@ button {
     padding-right: 20px;
 }
 
+input {
+    font-size: 3.5vh;
+    width: 125px;
+}
+
 .empty-tile {
     background: #333;
 }

@@ -21,7 +21,7 @@ ws_9020.onmessage = function(event) {
 		let movingTile = document.getElementById(`tile-${tileIdx}`);
         movingTile.style.backgroundColor = "green";
 
-		setTimeout(() => movingTile.style.backgroundColor = "#fff", 2000);
+		setTimeout(() => movingTile.style.backgroundColor = "#fff", 1000);
 	}
 };
 
@@ -153,6 +153,7 @@ function startGame() {
 
     let moveString = document.getElementById("moves");
     moveString.innerText = `Moves: ${moves}`;
+    document.getElementById("pepper-timeout").value = "";
 }
 
 let size_selector = document.getElementById("level");
@@ -184,7 +185,10 @@ pepper_help_btn.addEventListener("click", function(event) {
         for (let j = 0; j < size; ++j)
             gameTileMatrix[i].push(board[j + i * size]);
     }
-    ws_9020.send(JSON.stringify({"gameTileMatrix": gameTileMatrix}));
+
+    let timeout = parseInt(document.getElementById("pepper-timeout").value) || 0;
+
+    ws_9020.send(JSON.stringify({"gameTileMatrix": gameTileMatrix, "timeout": timeout}));
 })
 
 let game_over_dialog = document.getElementById("game-over");

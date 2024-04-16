@@ -86,21 +86,15 @@ def generate_N_puzzle(
     
     return problem
 
-def solve_N_puzzle(n_puzzle_problem: unified_planning.model.Problem, opt: bool) -> List[str]:
+def solve_N_puzzle(
+        n_puzzle_problem: unified_planning.model.Problem,
+        timeout: int) -> List[str]:
     unified_planning.shortcuts.get_environment().credits_stream = None
     with unified_planning.shortcuts.AnytimePlanner(
         name="fast-downward"
     ) as planner:
-    #with unified_planning.shortcuts.OneshotPlanner(name=f"fast-downward{'-opt' if opt else ''}") as planner:
-        #result = planner.solve(n_puzzle_problem)
-        #if result.status == unified_planning.engines\
-        #.PlanGenerationResultStatus.SOLVED_SATISFICING or \
-        #result.status == unified_planning.engines\
-        #.PlanGenerationResultStatus.SOLVED_OPTIMALLY:
-        #    actions = str(result.plan).split("\n    ")
-        #else:
-        #    actions = []
-        for result in planner.get_solutions(n_puzzle_problem, timeout=5):
+        for result in planner.get_solutions(
+            n_puzzle_problem, timeout=timeout if timeout != 0 else 5):
             pass
         if result.status == unified_planning.engines\
         .PlanGenerationResultStatus.SOLVED_SATISFICING or \

@@ -22,11 +22,9 @@ class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
         message = json.loads(message)
 
         if "gameTileMatrix" in message:
-            print("[N-Puzzle WS Server py]: Start planning...")
             problem = pddl_planning.generate_N_puzzle(message["gameTileMatrix"])
             opt = len(message["gameTileMatrix"]) == 3
-            moves = pddl_planning.solve_N_puzzle(problem, opt)
-            print("[N-Puzzle WS Server py]: Planning finished...")
+            moves = pddl_planning.solve_N_puzzle(problem, message["timeout"])
             if len(moves) < 2:
                 self.write_message(json.dumps({"move": 0}))
                 return
