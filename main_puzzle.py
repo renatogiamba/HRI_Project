@@ -1,16 +1,13 @@
 import json
-import numpy
-import os
-import sys
-import time
+import tornado
+import tornado.gen
 import tornado.httpserver
-import tornado.websocket
 import tornado.ioloop
 import tornado.web
+import tornado.websocket
 import pddl_planning
 
 n_puzzle_ws_server = None
-run = True
 
 class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
@@ -64,9 +61,7 @@ class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
             self.write_message(json.dumps({"move": tile}))
         elif "pose" in message:
             if message["pose"] == "win":
-                #pass
                 self.pepper_ws_server.write_message(json.dumps({"pose": "win"}))
-            #
 
     @tornado.gen.coroutine
     def on_close(self):
@@ -86,8 +81,6 @@ class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
         return True
 
 def main():
-    global run
-
     npuzzle_web_app = tornado.web.Application([
         (r"/websocketserver", NPuzzleWSServer)
     ])
@@ -107,7 +100,6 @@ def main():
         except tornado.websocket.WebSocketClosedError:
             pass
     print("[N-Puzzle App py]: N-Puzzle WS server quit")
-    run = False
 
 if __name__ == "__main__":
     main()

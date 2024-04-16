@@ -1,12 +1,13 @@
 import json
-import numpy
 import os
 import sys
 import time
+import tornado
+import tornado.gen
 import tornado.httpserver
-import tornado.websocket
 import tornado.ioloop
 import tornado.web
+import tornado.websocket
 
 sys.path.append(os.getenv("PEPPER_TOOLS_HOME") + "/cmd_server")
 sys.path.append("pepper")
@@ -101,7 +102,7 @@ class PepperWSServer(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-if __name__ == "__main__":
+def main():
     global pepper
 
     pepper_cmd.begin()
@@ -130,3 +131,6 @@ if __name__ == "__main__":
     print "[Pepper App py]: Pepper WS server quit"
 
     pepper_cmd.end()
+
+if __name__ == "__main__":
+    main()

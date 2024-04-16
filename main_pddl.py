@@ -10,5 +10,5 @@ if __name__ == "__main__":
 
     problem = pddl_planning.generate_N_puzzle(tile_matrix)
     print(problem)
-    actions = pddl_planning.solve_N_puzzle(problem, True)
+    actions = pddl_planning.solve_N_puzzle(problem, 5)
     print(actions)

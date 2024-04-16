@@ -1,16 +1,12 @@
 import json
-import numpy
-import os
-import sys
-import time
+import tornado
+import tornado.gen
 import tornado.httpserver
-import tornado.websocket
 import tornado.ioloop
 import tornado.web
-import pddl_planning
+import tornado.websocket
 
 survey_ws_server = None
-run = True
 
 class SurveyWSServer(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
@@ -59,8 +55,6 @@ class SurveyWSServer(tornado.websocket.WebSocketHandler):
         return True
 
 def main():
-    global run
-
     survey_web_app = tornado.web.Application([
         (r"/websocketserver", SurveyWSServer)
     ])
@@ -80,7 +74,6 @@ def main():
         except tornado.websocket.WebSocketClosedError:
             pass
     print("[Survey App py]: Survey WS server quit")
-    run = False
 
 if __name__ == "__main__":
     main()
