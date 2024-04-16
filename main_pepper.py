@@ -14,7 +14,6 @@ import pepper_cmd
 import pepper
 
 pepper_ws_server = None
-#survey_ws_server = None
 
 class PepperWSServer(tornado.websocket.WebSocketHandler):
     @tornado.gen.coroutine
@@ -73,7 +72,9 @@ class PepperWSServer(tornado.websocket.WebSocketHandler):
             if message["say"] == "Oh, that's OK. Have a nice day then!":
                 pepper.hello()
         elif "pose" in message:
-            if message["pose"] == "win":
+            if message["pose"] == "hello":
+                pepper.hello()
+            elif message["pose"] == "win":
                 pepper.victory()
             elif message["pose"] == "slide left":
                 pepper.slide_tile_left()
@@ -114,20 +115,10 @@ if __name__ == "__main__":
     pepper_http_server.listen("9050")
     print "[Pepper App py]: Pepper WS server listening on port 9050"
 
-    '''
-    survey_web_app = tornado.web.Application([
-        (r"/websocketserver", SurveyWSServer)
-    ])
-    survey_http_server = tornado.httpserver.HTTPServer(survey_web_app)
-    survey_http_server.listen("9030")
-    print "[Pepper App py]: Pepper Survey WS server listening on port 9030"
-    '''
-
     try:
         tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
         print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper WS server..."
-        #print "[Pepper App py]: ---KeyboardInterrupt--- Quitting Pepper Survey WS server..."
     
     if pepper_ws_server is not None:
         try:
@@ -136,14 +127,6 @@ if __name__ == "__main__":
                 pepper_ws_server.close()
         except tornado.websocket.WebSocketClosedError:
             pass
-        '''
-        try:
-            if survey_ws_server is not None:
-                survey_ws_server.write_message(json.dumps({"command": "close"}))
-                survey_ws_server.close()
-        except tornado.websocket.WebSocketClosedError:
-            pass'''
     print "[Pepper App py]: Pepper WS server quit"
-    #print "[Pepper App py]: Pepper Survey WS server quit"
 
     pepper_cmd.end()
