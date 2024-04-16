@@ -18,6 +18,9 @@ ws_9020.onmessage = function(event) {
 	}
 	else if (humanMessage.move != null) {
 		const tileIdx = humanMessage.move;
+
+        if (tileIdx == 0) return;
+        
 		let movingTile = document.getElementById(`tile-${tileIdx}`);
         movingTile.style.backgroundColor = "green";
 

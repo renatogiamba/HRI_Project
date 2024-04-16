@@ -4,7 +4,7 @@ import time
 sys.path.append(os.getenv("PEPPER_TOOLS_HOME") + "/cmd_server")
 import pepper_cmd
 
-class BlackjackPepper():
+class Pepper():
     def __init__(self):
         self._instance = pepper_cmd.robot
 
