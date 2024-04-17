@@ -60,8 +60,7 @@ class NPuzzleWSServer(tornado.websocket.WebSocketHandler):
                 self.pepper_ws_server.write_message(json.dumps({"pose": "slide right"}))
             self.write_message(json.dumps({"move": tile}))
         elif "pose" in message:
-            if message["pose"] == "win":
-                self.pepper_ws_server.write_message(json.dumps({"pose": "win"}))
+            self.pepper_ws_server.write_message(json.dumps({"pose": message["pose"]}))
 
     @tornado.gen.coroutine
     def on_close(self):

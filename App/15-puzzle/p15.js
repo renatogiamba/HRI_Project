@@ -65,6 +65,7 @@ function onClickTile(event) {
         moveString.innerText = `Moves: ${moves}`;
     }
     if (checkFinished()) {
+        ws_9020.send(JSON.stringify({"pose": "win"}));
         let game_over_dialog = document.getElementById("game-over");
         game_over_dialog.showModal();
     }
@@ -176,7 +177,7 @@ level_option.selected = true;
 
 let username = document.getElementById("user");
 username.innerHTML += " ";
-username.innerHTML += (localStorage.getItem("N-Puzzle-JS-username") || "GUEST");
+username.innerHTML += (localStorage.getItem("N-Puzzle-JS-userName") || "GUEST");
 
 let pepper_help_btn = document.getElementById("pepper-help");
 pepper_help_btn.addEventListener("click", function(event) {
